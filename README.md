@@ -4,7 +4,7 @@ Real world Image Restoration
 [2. rawRGB](#rawRGB)
 
 
-##sRGB
+## sRGB
 
 
 dfadaf
@@ -32,4 +32,4 @@ dfadaf
 dfadaf
 
 
-##rawRGB
+## rawRGB
