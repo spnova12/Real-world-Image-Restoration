@@ -1,10 +1,10 @@
 # Real world Image Restoration
 
-[1. sRGB](#sRGB)  
-[2. rawRGB](#rawRGB)
+[1. sRGB](#1.-sRGB)  
+[2. rawRGB](#2.-rawRGB)
 
 
-### sRGB
+## 1. sRGB
 
 
 dfadaf
@@ -32,4 +32,4 @@ dfadaf
 dfadaf
 
 
-### rawRGB
+## 2. rawRGB
