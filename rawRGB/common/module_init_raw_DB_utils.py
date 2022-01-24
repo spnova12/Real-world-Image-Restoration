@@ -12,9 +12,9 @@ import multiprocessing as mp
 from inspect import getframeinfo, stack
 from pathlib import Path
 
-from common.module_raw_utils import *
-from common.module_rw import *
-from common.module_utils import *
+from rawRGB.common.module_raw_utils import *
+from rawRGB.common.module_rw import *
+from rawRGB.common.module_utils import *
 
 
 def print_wrap(*args, **kwargs):

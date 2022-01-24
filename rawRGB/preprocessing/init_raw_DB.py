@@ -1,5 +1,5 @@
-from common.module_init_raw_DB_utils import *
-from common.module_utils import *
+from rawRGB.common.module_init_raw_DB_utils import *
+from rawRGB.common.module_utils import *
 import argparse
 
 

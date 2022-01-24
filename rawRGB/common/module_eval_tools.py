@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import os
 import tqdm
-import common.module_utils as utils
+import module_utils as utils
 
 import torch
 import torchvision.transforms as transforms

@@ -9,7 +9,7 @@ import torch.utils.data as data
 import random
 import cv2
 
-from common.module_init_raw_DB_utils import *
+from rawRGB.common.module_init_raw_DB_utils import *
 from common.module_raw_utils import get_normalized_raw_from_dng, normalized_dng_postprocess
 
 import sys
