@@ -3,8 +3,9 @@ from rawRGB.common.module_utils import *
 import argparse
 
 
-def init_raw_DB(args):
-    DB_dir = args.DNG_dir
+def init_raw_DB(DB_dir):
+    # Get this script's dir.
+    preprocessing_dir = os.path.dirname(os.path.realpath(__file__))
 
     # Read all the RAW versions.
     RAW_version_list = [os.path.join(DB_dir, x) for x in sorted(os.listdir(DB_dir))]
@@ -18,7 +19,7 @@ def init_raw_DB(args):
 
 
     # Exclude what has already checked.
-    checked_txt = 'checked.txt'
+    checked_txt = f'{preprocessing_dir}/checked.txt'
     checked_RAW_version_list = read_text(checked_txt)
     RAW_version_list = [tempdir for tempdir in RAW_version_list if tempdir not in checked_RAW_version_list]
 
@@ -28,7 +29,7 @@ def init_raw_DB(args):
 
 
     # Exclude loaded json error.
-    json_error_txt = 'error_report_json.txt'
+    json_error_txt = f'{preprocessing_dir}/error_report_json.txt'
     DNG_dir_list_with_json_error = read_text(json_error_txt)
     DNG_dir_list = [tempdir for tempdir in DNG_dir_list if tempdir not in DNG_dir_list_with_json_error]
 
@@ -71,14 +72,3 @@ def init_raw_DB(args):
 
     # Write RAW_version_list after it checked.
     write_text(checked_txt, RAW_version_list)
-
-
-
-if __name__ == '__main__':
-    print(os.path.realpath(__file__))
-    quit()
-    parser = argparse.ArgumentParser(description='Init RAW DB')
-    parser.add_argument('--DNGs_dir', default='/hdd1/works/datasets/ssd2/human_and_forest/RAW', type=str)
-    args = parser.parse_args()
-
-    init_raw_DB(args)

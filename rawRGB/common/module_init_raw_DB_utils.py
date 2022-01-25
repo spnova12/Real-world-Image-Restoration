@@ -24,6 +24,7 @@ def print_wrap(*args, **kwargs):
 
 
 def multiprocess_with_tqdm(func, work_list):
+    print_wrap(f'{os.cpu_count()}')
     pool = mp.Pool(processes=os.cpu_count())
     results = []
     for result in tqdm.tqdm(pool.imap_unordered(func, work_list),
@@ -67,70 +68,76 @@ def write_text(filename, new_item):
 
 
 def get_screens(json_dir):
-    with open(json_dir, 'r') as f:
-        json_data = json.load(f)
 
-    # print(json_data.keys())
-    # print(json_data['Raw_Data_Info.'])
-    # print(json_data['Source_Data_Info.'])
-    # print(json_data['Learning_Data_Info.'])
+    try:
+        with open(json_dir, 'r') as f:
+            json_data = json.load(f)
 
-    h, w = json_data['Raw_Data_Info.']['Resolution'].split(',')
+        # print(json_data.keys())
+        # print(json_data['Raw_Data_Info.'])
+        # print(json_data['Source_Data_Info.'])
+        # print(json_data['Learning_Data_Info.'])
 
-    w, h = float(w)/3, float(h)/3
-    # print('w h :', w, h)
+        h, w = json_data['Raw_Data_Info.']['Resolution'].split(',')
 
-    annotation = json_data['Learning_Data_Info.']['Annotation']
-    # print(len(annotation))
-    # print(annotation)
+        w, h = float(w)/3, float(h)/3
+        # print('w h :', w, h)
 
-    img = np.full((int(w), int(h), 3), 0, dtype=np.uint8)
+        annotation = json_data['Learning_Data_Info.']['Annotation']
+        # print(len(annotation))
+        # print(annotation)
 
-    drawImg = None
+        img = np.full((int(w), int(h), 3), 0, dtype=np.uint8)
 
-    for i, anno in enumerate(json_data['Learning_Data_Info.']["Annotation"]):
+        drawImg = None
 
-        # class id max is '38'
-        json_class_id = anno['Class_ID'][-2:]
-        rgb_val = int(json_class_id) * 5
+        for i, anno in enumerate(json_data['Learning_Data_Info.']["Annotation"]):
 
-        json_polygon = anno['segmentation']
+            # class id max is '38'
+            json_class_id = anno['Class_ID'][-2:]
+            rgb_val = int(json_class_id) * 5
 
-        if len(json_polygon) % 2 == 0:
+            json_polygon = anno['segmentation']
 
-            n = 2
-            polygon_split_to_2 = [json_polygon[i * n:(i + 1) * n] for i in
-                                  range((len(json_polygon) + n - 1) // n)]
+            if len(json_polygon) % 2 == 0:
 
-            pts = np.array(polygon_split_to_2, dtype=np.int32)
+                n = 2
+                polygon_split_to_2 = [json_polygon[i * n:(i + 1) * n] for i in
+                                      range((len(json_polygon) + n - 1) // n)]
 
-            color = rgb_val
+                pts = np.array(polygon_split_to_2, dtype=np.int32)
 
-            #for cnt in json_polygon:
-            drawImg = cv2.fillPoly(img, [pts], (color, color, color))
+                color = rgb_val
 
-            # The labels are build up layer by layer.
-            # cv2.imwrite(f'my_json_{str(i).zfill(3)}_{json_class_id}.png', drawImg)
-        else:
-            return None
+                #for cnt in json_polygon:
+                drawImg = cv2.fillPoly(img, [pts], (color, color, color))
 
-    ##########################################################
-    # binary json
-    # ban (17, 22, 23, 27) * 5
-    ban_ID_list = [17, 22, 23, 27]
-    ban_rgb_list = [x * 5 for x in ban_ID_list]
+                # The labels are build up layer by layer.
+                # cv2.imwrite(f'my_json_{str(i).zfill(3)}_{json_class_id}.png', drawImg)
+            else:
+                return None
 
-    new_map = np.zeros_like(drawImg)
-    for item in ban_rgb_list:
-        drawImg_c = copy.deepcopy(drawImg)
-        drawImg_c[drawImg != item] = 0.0
-        drawImg_c[drawImg == item] = 1.0
-        new_map += drawImg_c
+        ##########################################################
+        # binary json
+        # ban (17, 22, 23, 27) * 5
+        ban_ID_list = [17, 22, 23, 27]
+        ban_rgb_list = [x * 5 for x in ban_ID_list]
 
-    drawImg = np.clip(new_map, 0, 1)
-    ##########################################################
+        new_map = np.zeros_like(drawImg)
+        for item in ban_rgb_list:
+            drawImg_c = copy.deepcopy(drawImg)
+            drawImg_c[drawImg != item] = 0.0
+            drawImg_c[drawImg == item] = 1.0
+            new_map += drawImg_c
 
-    return drawImg
+        drawImg = np.clip(new_map, 0, 1)
+        ##########################################################
+
+        return drawImg
+
+    # I don't know what the error reason is but just skip this json.
+    except:
+        return None
 
 
 def get_dng_dir_list(RAW_version_list):
@@ -253,7 +260,7 @@ def DNG_dir_dict_to_list(DNG_dir_dict):
 
 class DNGtoPatches:
     def __init__(self, DB_dir):
-        print_wrap('Generate_patches, Delete DNGs after cropped??')
+        print_wrap('Generate_patches.')
         self.DB_dir = DB_dir
 
     def generate_patches(self, my_dng_dir):
@@ -346,8 +353,9 @@ def DB_dir_to_paired_list(DB_dir, json_folder_dir):
     # only directories (except wrong folders)
     RAW_version_list = [tempdir for tempdir in RAW_version_list if os.path.isdir(tempdir)]
 
+    print_wrap('real all the .bz2')
     raw_dir_list = []
-    for RAW_version in RAW_version_list:
+    for RAW_version in tqdm.tqdm(RAW_version_list):
         raw_dir_list += glob.glob(f"{RAW_version}/*.bz2")
 
     # Except 'cfa_mask':

@@ -1,4 +1,4 @@
-from module_init_raw_DB_utils import *
+from rawRGB.common.module_init_raw_DB_utils import *
 
 def my_raw_16bit_to_normalized_raw(raw_16bit, metadata_dict, cfa_mask):
     # compute ISO, noise model, and color matrix
@@ -77,6 +77,8 @@ class FindGoodNoisyPair:
             # get psnr.
             psnr = get_psnr(gt_img, noisy_img, max_value=1)
             noisy_with_psnr_list.append([noisy, psnr, noisy_iso])
+
+        ########################################################################################################
 
         # sort by psnr.
         noisy_with_psnr_list = sorted(noisy_with_psnr_list, key=lambda x: x[1], reverse=True)

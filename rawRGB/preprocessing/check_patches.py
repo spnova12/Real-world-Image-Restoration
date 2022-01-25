@@ -1,6 +1,6 @@
 import os
 import glob
-from common.module_init_raw_DB_utils import *
+from rawRGB.common.module_init_raw_DB_utils import *
 import argparse
 
 parser = argparse.ArgumentParser(description='check_patches')
