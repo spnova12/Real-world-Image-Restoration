@@ -56,7 +56,11 @@ def check_patches_findbestpairs(DB_dir):
         print_wrap('save samples for visualization')
         sample_save_dir = make_dirs('toy_test/sorted_by_psnr_5')
 
+
+    # multiprocess doesn't mean much to this for loop. Single process is more fast.
     find_good_noisy_pair = FindGoodNoisyPair(gt_based_dict, sample_save_dir=sample_save_dir, real_mode=True)
-    multiprocess_with_tqdm(find_good_noisy_pair.find_good_noisy_pair, gt_keys)
+    for gt_key in tqdm.tqdm(gt_keys):
+        find_good_noisy_pair.find_good_noisy_pair(gt_key)
+
 
 
