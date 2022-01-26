@@ -1,5 +1,7 @@
 # Real world Image Restoration
 
+  
+rain, fog, dust, snow, lowlight(sRGB), lowlight(RAW-RGB)
 
 ## 1. sRGB
 
@@ -25,7 +27,9 @@ Dataset structure
     ```shell
     python init.py 
     ```  
-    Doing this you get 'DB_in_DataSet_patches'.  
-    DNG images are split into patches(.DNG -> .bz2).
+    Doing this you get 'DB_in_DataSet_patches'. 
+    DNG images are split into patches(.DNG -> .bz2). 
     Result bz2 patch samples are saved as 8bit sRGB through simple ISP in ./rawRGB/preprocessing.
-4. '
+4. Train.  
+    If you have pretrained model then you can skip training.  
+5. Test.
