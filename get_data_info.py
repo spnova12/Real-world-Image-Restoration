@@ -4,13 +4,12 @@ import sys
 
 import yaml
 
-import rawRGB.train as rawRGB_train
-# import sRGB.train as sRGBp
+import rawRGB.get_data_info_ as getdatainfo
+# import sRGB.preprocessing_ as sRGBp
 
 
 parser = argparse.ArgumentParser(description='Init')
 parser.add_argument('-mode', default='None', type=str)
-parser.add_argument('-exp_name', default='rawRGB000', type=str)
 args = parser.parse_args()
 
 # read yaml.
@@ -23,7 +22,10 @@ if args.mode == 'sRGB':
 
 
 elif args.mode == 'rawRGB':
-    rawRGB_train.train(args.exp_name, dirs['rawRGB']['DB_dir'])
+    getdatainfo.get_data_info(dirs['rawRGB']['DB_dir'])
 
 else:
     sys.exit('mode is not correct')
+
+
+

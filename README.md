@@ -25,11 +25,16 @@ Dataset structure
 2. Set the '.dirs.yaml'.
 3. Init the dataset. 
     ```shell
-    python init.py 
+    python init.py -mode rawRGB
     ```  
     Doing this you get 'DB_in_DataSet_patches'. 
-    DNG images are split into patches(.DNG -> .bz2). 
-    Result bz2 patch samples are saved as 8bit sRGB through simple ISP in ./rawRGB/preprocessing.
-4. Train.  
+    DNG images are split into patches(.DNG -> .bz2).   
+4. After making the patch is done, check the refined Dataset result.
+    ```shell
+    python get_data_info.py -mode rawRGB
+    ```
+   Result bz2 patch samples are saved as 8bit sRGB through simple ISP
+   in './rawRGB'.
+5. Train.  
     If you have pretrained model then you can skip training.  
-5. Test.
+6. Test.

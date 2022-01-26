@@ -9,9 +9,9 @@ import pandas as pd
 import os
 import numpy as np
 
-import common.module_utils as utils
-import common.module_eval_tools as eval_tools
-from common.module_init_raw_DB_utils import *
+import rawRGB.common.module_utils as utils
+import rawRGB.common.module_eval_tools as eval_tools
+from rawRGB.common.module_init_raw_DB_utils import *
 
 import cv2
 

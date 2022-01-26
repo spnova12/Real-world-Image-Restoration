@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import os
 import tqdm
-import module_utils as utils
+import rawRGB.common.module_utils as utils
 
 import torch
 import torchvision.transforms as transforms
@@ -148,7 +148,7 @@ def recon_big_one_frame(input_big_list, wh, net, scale_factor, minimum_wh, devic
 
 
 # <><><> 사용할 net architecture 선택하기.
-import common_net.GRDN as net
+import rawRGB.common_net.GRDN as net
 
 
 class NetForInference(object):

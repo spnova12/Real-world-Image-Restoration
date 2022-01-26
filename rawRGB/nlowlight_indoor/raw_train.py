@@ -13,18 +13,17 @@ import torch.backends.cudnn as cudnn
 # to find the best algorithm to use for your hardware.
 cudnn.benchmark = True
 
-import common.module_utils as utils
-import d0_raw.module_data as module_data
-import d0_raw.module_train as module_train
-import d0_raw.module_eval as module_eval
+import rawRGB.common.module_utils as utils
+import rawRGB.nlowlight_indoor.module_data as module_data
+import rawRGB.nlowlight_indoor.module_train as module_train
+import rawRGB.nlowlight_indoor.module_eval as module_eval
 
 
 # <><><> 사용할 net architecture 선택하기.
-import common_net.MPRNet as MPRNet
-import common_net.GRDN as GRDN
+import rawRGB.common_net.MPRNet as MPRNet
 
 
-def main():
+def main(exp_name, hf_patches_folder_dir, json_folder_dir):
     # pytorch 버전 출력하기.
     print('\n===> Pytorch version :', torch.__version__)
 
@@ -33,13 +32,13 @@ def main():
     DataParallel = True
 
     # <><><> 실험 이름.
-    exp_name = f'raw000'
+    # exp_name = f'raw000'
     exp_dir = utils.make_dirs(f'train-out/{exp_name}')
     print(f'\n===> exp_name : {exp_name}')
 
     # <><><> hf_DB_dir
-    hf_patches_folder_dir = '/home/lab/works/datasets/ssd2/human_and_forest/RAW_patches'
-    json_folder_dir = '/home/lab/works/datasets/ssd2/human_and_forest/RAW'
+    # hf_patches_folder_dir = '/home/lab/works/datasets/ssd2/human_and_forest/RAW_patches'
+    # json_folder_dir = '/home/lab/works/datasets/ssd2/human_and_forest/RAW'
 
     # <><><> checkpoint version
     checkpoint_version = 'checkpoint_last.pth'
@@ -101,7 +100,7 @@ def main():
         'iter_saving_image': 5000,
 
         # 총 몇 iteration 학습시킬 것인가.
-        'iter_total': 5000 * 200,
+        'iter_total': 5000 * 50,
 
         # learning rate decay 할때 얼만큼 할것인가.
         'decay_rate': 0.7,

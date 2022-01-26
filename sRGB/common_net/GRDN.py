@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import cv2
-from common_net.cbam import *
+from sRGB.common_net.cbam import *
 
 
 class make_dense(nn.Module):

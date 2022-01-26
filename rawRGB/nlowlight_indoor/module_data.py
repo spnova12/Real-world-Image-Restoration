@@ -10,10 +10,10 @@ import random
 import cv2
 
 from rawRGB.common.module_init_raw_DB_utils import *
-from common.module_raw_utils import get_normalized_raw_from_dng, normalized_dng_postprocess
+from rawRGB.common.module_raw_utils import get_normalized_raw_from_dng, normalized_dng_postprocess
 
 import sys
-import common.module_utils as utils
+import rawRGB.common.module_utils as utils
 
 import torchvision.transforms as transforms
 import torch
