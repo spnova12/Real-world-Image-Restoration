@@ -80,6 +80,9 @@ def read_text(filename):
             line = line.strip()  # 줄 끝의 줄 바꿈 문자를 제거한다.
             my_list.append(line)
         f.close()
+
+    # Delete duplicates.
+    my_list = list(set(my_list))
     return my_list
 
 
@@ -105,30 +108,22 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
     ############################################################################################################
     # Figure out Each version, read meta infos (error txt), init
     ############################################################################################################
-    print('===========================================================================================')
-    print('Total information')
-    print('===========================================================================================')
     R_F_D_S_C = [os.path.join(DB_dir, x) for x in sorted(os.listdir(DB_dir))]
 
     # only directories (except wrong folders)
     R_F_D_S_C = [tempdir for tempdir in R_F_D_S_C if os.path.isdir(tempdir)]
 
+    # todo : for toy exp.
+    R_F_D_S_C = R_F_D_S_C  # [:2]
+
+    print(f"\n:: sRGB DB list : \n{[os.path.basename(bname) for bname in R_F_D_S_C]}")
+
     # Get this script's dir.
     preprocessing_dir = os.path.dirname(os.path.realpath(__file__))
-    # todo
-    # R_F_D_S_C = R_F_D_S_C[:3]
 
     # load error json list npy
     error_json_list_dir = f'{preprocessing_dir}/error_json_list.txt'
     error_json_list = read_text(error_json_list_dir)
-
-    if os.path.isfile(error_json_list_dir):
-        with open(error_json_list_dir, "r") as fp:
-            error_json_list = json.load(fp)
-            print(f'>> Load {error_json_list_dir}')
-    else:
-        print(f'>> No {error_json_list_dir}')
-
 
     # init my_dict_per_version
     my_dict_per_version = []
@@ -140,45 +135,40 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
     R_F_D_S_C_checked_txt = f"{preprocessing_dir}/R_F_D_S_C_checked.txt"
     R_F_D_S_C_list = []
     if check_json and os.path.isfile(R_F_D_S_C_checked_txt):
-        print(f'\n>> Checked DB {error_json_list_dir}')
-        f = open(R_F_D_S_C_checked_txt, 'r')
-        R_F_D_S_C_checked_lines = f.readlines()
-        for line in R_F_D_S_C_checked_lines:
-            line = line.strip()  # 줄 끝의 줄 바꿈 문자를 제거한다.
-            print(line)
-            R_F_D_S_C_list.append(line)
-        f.close()
+        R_F_D_S_C_list = read_text(R_F_D_S_C_checked_txt)
 
     ############################################################################################################
     # Read all noises one by one, Check json Errors.
     ############################################################################################################
     for version_dir in R_F_D_S_C:
+        error_json_list_new = []
+
+        version_base_name = os.path.basename(version_dir)
+
         if check_json and version_dir in R_F_D_S_C_list:
+            print(f'\n:: {version_base_name} has already been verified')
             lets_check_db = False
         else:
             lets_check_db = True
 
         if lets_check_db:
-            version_base_name = os.path.basename(version_dir)
             DB_list = [os.path.join(version_dir, x) for x in sorted(os.listdir(version_dir))]
 
-            print('\n===========================================================================================')
-            print(version_base_name, '---------------------------')
-            print('>> Init images len :', len(DB_list))
+            print(f'\n:: Check {version_base_name}. (Initial images count : {len(DB_list)})')
             images_len_sum += len(DB_list)
 
             noises = ['R', 'F', 'D', 'S', 'L']  # Rain, Fog, Dust, Snow, Lowlight
 
             my_dict = {}
 
-            for db_dir in tqdm.tqdm(DB_list[25616:]):
+
+            for db_dir in tqdm.tqdm(DB_list):
 
                 if check_json and db_dir not in error_json_list:
                     my_json = os.path.splitext(db_dir)[0] + '.json'
                     drawImg = get_sky(my_json)
                     if drawImg is None:
-                        error_json_list.append(db_dir)
-                        print('json error :', db_dir)
+                        error_json_list_new.append(db_dir)
 
                 if db_dir not in error_json_list:
                     # read only image not json.
@@ -192,8 +182,7 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
                         size_error = False
                         if w != 1920 or h != 1080:
                             size_error = True
-                            print('size error :', db_dir, w, h)
-
+                            # print('size error :', db_dir, w, h)
 
                         if not size_error:
                             # (1) date
@@ -227,14 +216,22 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
 
             # print info
             dict_counter = get_count_for_each_noise(my_dict)
+            print(':: Number of key values of noise included in this folder.')
             for my_dict_key2 in dict_counter.keys():
-                print(f'>> {my_dict_key2} : {len(dict_counter[my_dict_key2])}')
+                print(f'::   {my_dict_key2} : {len(dict_counter[my_dict_key2])}')
 
             my_dict_per_version.append(my_dict)
 
+            # backup. (save error json list)
+            write_text(error_json_list_dir, error_json_list_new)
+            print(f':: Each json Error information : {len(error_json_list_new)} '
+                  f'(It is excluded from the training data set. check error_json_list.txt)')
+
+        # back up.
         if lets_check_db:
-            with open(R_F_D_S_C_checked_txt, "a") as f:
-                f.write(f"{version_dir}\n")
+            write_text(R_F_D_S_C_checked_txt, version_dir)
+
+
 
 
     ############################################################################################################
@@ -250,13 +247,6 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
     ############################################################################################################
     # Json errors.
     ############################################################################################################
-    # save error json list
-    print('\n===========================================================================================')
-    with open(error_json_list_dir, "w") as fp:
-        json.dump(error_json_list, fp)
-    print(f'Each json Error information : {len(error_json_list)} (It is excluded from the training data set)')
-    for error_json_dir in error_json_list:
-        print(error_json_dir)
 
 
     ############################################################################################################
@@ -281,8 +271,7 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
         total_dict.pop(my_key)
 
     # print error dataset
-    print('\n===========================================================================================')
-    print('Each image Error information (It is excluded from the training data set)')
+    print('\n:: Each image Error information (It is excluded from the training data set)')
     for my_key in total_dict_error.keys():
         print('---------------------------')
         print('p_id :', my_key)
@@ -296,25 +285,23 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
 
 
 
-    print('\n===========================================================================================')
-    print('total size')
-    print('>> images len :', images_len_sum)
+    print('\n:: total size')
+    print(':: images len :', images_len_sum)
     dict_counter = get_count_for_each_noise(total_dict_old)
     for my_dict_key2 in dict_counter.keys():
-        print(f'>> {my_dict_key2} : {len(dict_counter[my_dict_key2])}')
+        print(f':: {my_dict_key2} : {len(dict_counter[my_dict_key2])}')
 
-    print('\ntotal size (After error removal)')
+    print('\n:: total size (After error removal)')
     dict_counter = get_count_for_each_noise(total_dict)
     for my_dict_key2 in dict_counter.keys():
-        print(f'>> {my_dict_key2} : {len(dict_counter[my_dict_key2])}')
+        print(f':: {my_dict_key2} : {len(dict_counter[my_dict_key2])}')
 
 
     ############################################################################################################
     # Option. Show detail infos.
     ############################################################################################################
     if show_details:
-        print('\n===========================================================================================')
-        print('Each image information')
+        print('\n:: Each image information')
         for my_key in total_dict.keys():
             print('---------------------------')
             print('p_id :', my_key)
