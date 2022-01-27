@@ -4,8 +4,8 @@ import sys
 
 import yaml
 
-import rawRGB.get_data_info_ as getdatainfo
-# import sRGB.preprocessing_ as sRGBp
+import rawRGB.get_data_info_ as rawRGB_get_data_info
+import sRGB.get_data_info_ as sRGB_get_data_info
 
 
 parser = argparse.ArgumentParser(description='Init')
@@ -18,11 +18,10 @@ with open('dirs.yaml') as f:
 
 
 if args.mode == 'sRGB':
-    pass
-
+    sRGB_get_data_info.get_data_info(dirs['sRGB']['DB_dir'])
 
 elif args.mode == 'rawRGB':
-    getdatainfo.get_data_info(dirs['rawRGB']['DB_dir'])
+    rawRGB_get_data_info.get_data_info(dirs['rawRGB']['DB_dir'])
 
 else:
     sys.exit('mode is not correct')

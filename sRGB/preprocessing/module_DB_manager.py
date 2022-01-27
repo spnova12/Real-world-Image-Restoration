@@ -209,7 +209,8 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
 
                                 if my_key not in my_dict:
                                     my_dict[my_key] = {}
-                                    my_dict[my_key][noise_id] = {'01': [], '02': [], '03': [], '04': [], 'GT': []}
+                                    my_dict[my_key][noise_id] = {'01': [], '02': [], '03': [], '04': [], '05': [],
+                                                                 '06': [], 'GT': []}
                                     my_dict[my_key][noise_id][noise_level].append(db_dir)
                                 else:
                                     my_dict[my_key][noise_id][noise_level].append(db_dir)
@@ -259,16 +260,19 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
         for my_key2 in total_dict[my_key].keys():
             if total_dict[my_key][my_key2]:
                 for my_key3 in total_dict[my_key][my_key2].keys():
-                    if len(total_dict[my_key][my_key2][my_key3]) == 0:
-                        error = True
-                    if my_key3 != 'GT' and len(total_dict[my_key][my_key2][my_key3]) < 30:
-                        error = True
+                    # 05 and 06 is special case. So ignore errors from 05, 06
+                    if my_key3 != "05" and my_key3 != "06":
+                        if len(total_dict[my_key][my_key2][my_key3]) == 0:
+                            error = True
+                        if my_key3 != 'GT' and len(total_dict[my_key][my_key2][my_key3]) < 30:
+                            error = True
         if error:
             total_dict_error[my_key] = total_dict[my_key]
 
     # delete error keys from total_dict
     for my_key in total_dict_error.keys():
         total_dict.pop(my_key)
+
 
     # print error dataset
     print('\n:: Each image Error information (It is excluded from the training data set)')
@@ -446,77 +450,4 @@ def get_sky(json_dir):
         drawImg[drawImg == 10] = 1.0
 
     return drawImg
-
-
-if __name__ == "__main__":
-    hf_DB = HumanForrestManager('/hdd1/works/datasets/ssd2/human_and_forest/R_F_D_S_C', 'F',
-                                show_details=True, check_json=True)
-
-    print('\n===========================================================================================')
-    print('DB len :', hf_DB.get_db_len())
-    # idx = 2
-    # if hf_DB.get_db_len() <= idx:
-    #     print('No Datasets')
-    # else:
-    #     median = True
-    #     if median:
-    #         input, target = hf_DB.get_input_target_pairs(idx, noise_level=4, median=median)
-    #         print('input, target', len(input), target)
-    #
-    #         median_imgs = MedianImgs(input)
-    #         my_median_img = median_imgs.get_median_result()
-    #         my_noisy_img = median_imgs.get_imgs_list()[3]
-    #
-    #         my_json = os.path.splitext(input[0])[0] + '.json'
-    #         drawImg = get_sky(my_json)
-    #
-    #         sd = 8
-    #         truncate = 2
-    #         radius = int(truncate * sd + 0.5)
-    #         drawImg = cv2.GaussianBlur(drawImg * 255, (radius*2+1, radius*2+1), sd)
-    #         drawImg = np.clip(drawImg, 0, 255)
-    #         cv2.imwrite('mask.png', drawImg)
-    #         drawImg = drawImg / 255
-    #
-    #         my_gt_img = cv2.imread(target)
-    #
-    #         clouds = my_median_img * drawImg
-    #         forground = my_gt_img * (1 - drawImg)
-    #
-    #         new_gt_img = clouds + forground
-    #
-    #
-    #         cv2.imwrite('my_noisy_img.png', my_noisy_img)
-    #         cv2.imwrite('my_gt_img.png', my_gt_img)
-    #         cv2.imwrite('new_gt_img.png', new_gt_img)
-    #         cv2.imwrite('median_img.png', my_median_img)
-    #
-    #         print(numpyPSNR('my_noisy_img.png', 'my_gt_img.png'))
-    #         print(numpyPSNR('my_noisy_img.png', 'new_gt_img.png'))
-    #     else:
-    #         input, target = hf_DB.get_input_target_pairs(idx, noise_level=4, median=median)
-    #         print('input, target', len(input), target)
-    #
-    #         my_json = os.path.splitext(input)[0] + '.json'
-    #         drawImg = get_sky(my_json)
-    #         cv2.imwrite('mask.png', (drawImg * 255))
-    #
-    #         my_noisy_img = cv2.imread(input)
-    #         my_gt_img = cv2.imread(target)
-    #
-    #         clouds = my_noisy_img * drawImg
-    #         forground = my_gt_img * (1 - drawImg)
-    #         new_gt_img = clouds + forground
-    #
-    #         cv2.imwrite('my_noisy_img.png', my_noisy_img)
-    #         cv2.imwrite('my_gt_img.png', my_gt_img)
-    #         cv2.imwrite('new_gt_img.png', new_gt_img)
-    #
-    #         print(numpyPSNR('my_noisy_img.png', 'my_gt_img.png'))
-    #         print(numpyPSNR('my_noisy_img.png', 'new_gt_img.png'))
-
-
-
-
-
 

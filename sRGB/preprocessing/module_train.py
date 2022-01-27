@@ -2,7 +2,7 @@
 import os
 import numpy as np
 
-import common.module_losses as module_losses
+import sRGB.common.module_losses as module_losses
 
 import collections, functools, operator  # dict 더할때 사용
 # (https://www.geeksforgeeks.org/python-sum-list-of-dictionaries-with-same-key/)

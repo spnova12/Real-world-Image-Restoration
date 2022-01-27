@@ -4,13 +4,22 @@
 rain, fog, dust, snow, lowlight(sRGB), lowlight(RAW-RGB)
 
 ## 1. sRGB
+1. Download Dataset.  
 
-
+2. Set the '.dirs.yaml'.  
+3. Init the dataset.  
+    ```shell
+    python init.py -mode sRGB
+    ```  
+4. Check dataset.  
+    ```shell
+    python get_data_info.py -mode sRGB
+    ```
 
 
 
 ## 2. rawRGB
-1. Download Dataset  
+1. Download Dataset.  
 Dataset structure  
 `DB_in_DataSet` <br/>
   `├──01`  <br/>

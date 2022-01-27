@@ -9,10 +9,10 @@ import pandas as pd
 import os
 import numpy as np
 
-import common.module_utils as utils
-import common.module_eval_tools as eval_tools
+import sRGB.common.module_utils as utils
+import sRGB.common.module_eval_tools as eval_tools
 
-from common.module_DB_manager import HumanForrestManager, get_sky
+from sRGB.preprocessing.module_DB_manager import HumanForrestManager, get_sky
 
 import cv2
 

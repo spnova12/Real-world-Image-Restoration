@@ -5,10 +5,10 @@ import cv2
 from torch.utils.data import DataLoader
 import torch
 
-import common.module_utils as utils
-import d0_noisy_gt_aligner.module_data as module_data
-import d0_noisy_gt_aligner.module_eval as module_eval
-import d0_noisy_gt_aligner.module_train as module_train
+import sRGB.common.module_utils as utils
+import sRGB.preprocessing.module_data as module_data
+import sRGB.preprocessing.module_eval as module_eval
+import sRGB.preprocessing.module_train as module_train
 
 import argparse
 
@@ -18,26 +18,35 @@ import torch.backends.cudnn as cudnn
 cudnn.benchmark = True
 
 # <><><> 사용할 net architecture 선택하기.
-import common_net.GRDN as net
+import sRGB.common_net.GRDN as net
 
-def main():
+
+def noisy_gt_aligner_train(exp_name, hf_DB_dir, noise_type, cuda_num=None):
     # pytorch 버전 출력하기.
     print('\n===> Pytorch version :', torch.__version__)
 
     # <><><> 사용할 gpu 번호. (multi gpu 를 사용하려면 '0 으로 하고, DataParallel 을 True 로 해줌)
-    cuda_num = 0
-    DataParallel = False
+    # If cuda_num == None -> it means using DataParallel.
+    if cuda_num == None:
+        cuda_num = 0
+        DataParallel = True
+    else:
+        DataParallel = False
 
     # <><><> 실험 이름.
-    exp_name = f'018'
+    # exp_name = f'018'
     exp_dir = utils.make_dirs(f'train-out/{exp_name}')
     print(f'\n===> exp_name : {exp_name}')
 
     # <><><> noise type ('R', 'F', 'D', 'S', 'L' : Rain, Fog, Dust, Snow, Lowlight)
-    noise_type = 'R'
+    # noise_type = 'R'
 
-    # <><><> DB with Median
-    median = True
+    # <><><> DB with Median depend on noise type.
+    if noise_type == 'R' or noise_type == 'S':
+        median = True
+    else:
+        median = False
+
     edge_lambda = 1
     color_lambda = 1.5
     sigma = 3
@@ -72,6 +81,7 @@ def main():
     # DataLoader 을 만들어준다.
     def init_train_loader(num_workers):
         train_set = module_data.DatasetForDataLoader(
+            hf_DB_dir,
             noise_type,
             additional_info=additional_info,
             median=median
