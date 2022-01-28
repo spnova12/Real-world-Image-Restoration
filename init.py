@@ -22,8 +22,10 @@ with open('dirs.yaml') as f:
 
 
 # sRGB.
+# Check DB
 if args.mode == 'sRGB' and not args.train_align_net:
     sRGBp.preprocessing(dirs['sRGB']['DB_dir'])
+# Train align network.
 elif args.mode == 'sRGB' and args.train_align_net:
     # noise type : ('R', 'F', 'D', 'S', 'L' : Rain, Fog, Dust, Snow, Lowlight)
     # i f cuda_num is None it means use multi gpus.

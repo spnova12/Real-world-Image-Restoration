@@ -64,7 +64,7 @@ def noisy_gt_aligner_train(exp_name, hf_DB_dir, noise_type, cuda_num=None):
     # <><><> training 과 valid 에 추가로 사용되는 정보를 입력해준다.
     additional_info = {
         'input_patch_size': 96,
-        'batch_size': 16
+        'batch_size': 4  # 16
     }
 
     # <><><> 사용할 딥러닝 모델들을 불러온다.

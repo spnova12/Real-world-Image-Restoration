@@ -1,9 +1,29 @@
 # Real world Image Restoration
 
-  
-rain, fog, dust, snow, lowlight(sRGB), lowlight(RAW-RGB)
+## Overview
+rain, fog, dust, snow, lowlight(sRGB), lowlight(RAW-RGB)  
 
-## 1. sRGB
+## Datasets
+Dataset structure  
+`DB_in_DataSet`  
+  `├──01`   
+  `├──02`   
+  `├──...`   
+  `└──08`   
+      `├──D-210925_I2005L01_001.dng`   
+      `├──D-210925_I2005L01_001_0001.json`   
+      `└──...`   
+
+
+## Installation
+
+
+
+
+## Quick Run
+
+## Training and Evaluation
+### 1. sRGB
 1. Download Dataset.  
 
 2. Set the '.dirs.yaml'.  
@@ -15,22 +35,34 @@ rain, fog, dust, snow, lowlight(sRGB), lowlight(RAW-RGB)
     ```shell
     python get_data_info.py -mode sRGB
     ```
+5. Train align network.
+    ```shell
+    python init.py -mode sRGB -train_align_net -exp_name {} -noise_type {} -cuda_num {}
+    ```
+   - noise type 
+     - R : Rain  
+     - F : Fog  
+     - D : Dust   
+     - S : Snow  
+     - L : Lowlight    
+   - cuda_num None -> It means use multi gpus.
+   - example  
+    ```shell
+    # rain  
+    python init.py -mode sRGB -train_align_net -exp_name rain001 -noise_type R -cuda_num 0  
+   
+    # fog  
+    python init.py -mode sRGB -train_align_net -exp_name fog001 -noise_type F -cuda_num 1  
+       
+    # snow  
+    python init.py -mode sRGB -train_align_net -exp_name snow001 -noise_type S -cuda_num 2  
+   
+    # lowlight  
+    python init.py -mode sRGB -train_align_net -exp_name lowl001 -noise_type L -cuda_num 3  
+   ```
 
-
-
-## 2. rawRGB
-1. Download Dataset.  
-Dataset structure  
-`DB_in_DataSet` <br/>
-  `├──01`  <br/>
-  `├──02` <br/>
-  `├──...` <br/>
-  `└──08` <br/>
-      `├──D-210925_I2005L01_001.dng` <br/>
-      `├──D-210925_I2005L01_001_0001.json` <br/>
-      `└──...`  
-
-
+### 2. rawRGB
+1. Download Dataset.
 2. Set the '.dirs.yaml'.
 3. Init the dataset. 
     ```shell
@@ -46,4 +78,8 @@ Dataset structure
    in './rawRGB'.
 5. Train.  
     If you have pretrained model then you can skip training.  
-6. Test.
+6. Test.  
+
+## Results
+
+## Contact 

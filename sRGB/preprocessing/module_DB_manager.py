@@ -161,7 +161,7 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
 
             my_dict = {}
 
-
+            DB_list = DB_list[:10000]
             for db_dir in tqdm.tqdm(DB_list):
 
                 if check_json and db_dir not in error_json_list:
@@ -357,9 +357,16 @@ class HumanForrestManager:
         return len(self.my_db)
 
     def get_input_target_pairs(self, my_idx, noise_level=None, noisy_num=None, median=False):
+        # The median is taken from the images with a margin around the center image.
+        margin = 3
+
         if noise_level is None:
             levels = list(self.my_db[my_idx].keys())
             levels.remove('GT')
+
+            # If the level has no items then delete from levels.
+            levels = [l for l in levels if len(self.my_db[my_idx][l]) > (margin * 2 + 1)]
+
             level = random.choice(levels)
         else:
             if type(noise_level) == int:
@@ -368,6 +375,8 @@ class HumanForrestManager:
 
         if not self.my_db[my_idx][level]:
             print('------------------------------')
+            print('levels:', levels)
+            print('level :', level)
             print('Error idx :', my_idx)
             print(self.my_db[my_idx][level])
             print(self.my_db[my_idx])
@@ -375,7 +384,6 @@ class HumanForrestManager:
             quit()
         else:
             if median:
-                margin = 3
                 if noisy_num == None:
                     noisy_num = random.randint(margin, len(self.my_db[my_idx][level])-margin-1)
                     input = []
