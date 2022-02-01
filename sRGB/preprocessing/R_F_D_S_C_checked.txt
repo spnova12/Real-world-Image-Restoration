@@ -26,3 +26,6 @@
 /home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C/21_DB
 /home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C/22_DB
 /home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C/23_DB
+/home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C/24_DB
+/home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C/25_DB
+/home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C/26_DB

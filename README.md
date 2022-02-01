@@ -24,7 +24,6 @@ Dataset structure
     numpy
     opencv_python
     Pillow
-    pyexiv2
     PyYAML
     rawpy
     scikit_image

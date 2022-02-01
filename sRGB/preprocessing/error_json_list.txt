@@ -32,3 +32,5 @@
 /home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C/17_DB/D-210925_O8102L04_013_0010.json
 /home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C/17_DB/D-210927_O9110F04_004_0014.jpg
 /home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C/17_DB/D-210927_O9110F04_004_0014.json
+/home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C/25_DB/D-211130_O1002R02_044_0027.jpg
+/home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C/25_DB/D-211130_O1002R02_044_0027.json
