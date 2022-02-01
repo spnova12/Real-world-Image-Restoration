@@ -3,8 +3,6 @@ from os import listdir
 from os.path import join
 import os
 
-import pandas as pd
-
 import math
 import numpy as np
 import torch.utils.data as data
