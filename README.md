@@ -15,7 +15,36 @@ Dataset structure
       `└──...`   
 
 
-## Installation
+## Installation  
+- Requirements
+
+    ```
+    colour
+    colour_demosaicing
+    numpy
+    opencv_python
+    Pillow
+    pyexiv2
+    PyYAML
+    rawpy
+    scikit_image
+    skimage
+    torch==1.7.1
+    torchvision
+    tqdm
+    ```
+  
+- pyexiv2  
+    It uses some C/C++ code and it needs other modules in C/C++. For this you have to install these.
+    Install py3exiv2 not pyexiv2.
+    ```
+    apt install exiv2
+    apt install python3-dev
+    apt install libexiv2-dev
+    apt install libboost-python-dev
+    pip install py3exiv2
+    ```   
+
 
 
 

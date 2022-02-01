@@ -5,7 +5,6 @@ from glob import glob
 import warnings
 
 import tqdm
-import pandas as pd
 import os
 import numpy as np
 
