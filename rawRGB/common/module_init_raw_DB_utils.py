@@ -353,7 +353,7 @@ def DB_dir_to_paired_list(DB_dir, json_folder_dir):
     # only directories (except wrong folders)
     RAW_version_list = [tempdir for tempdir in RAW_version_list if os.path.isdir(tempdir)]
 
-    print_wrap('real all the .bz2')
+    print_wrap('Read all the patches.(.bz2)')
     raw_dir_list = []
     for RAW_version in tqdm.tqdm(RAW_version_list):
         raw_dir_list += glob.glob(f"{RAW_version}/*.bz2")
@@ -364,7 +364,7 @@ def DB_dir_to_paired_list(DB_dir, json_folder_dir):
     # DNG_dir_list to dict
     my_dict = {}
 
-    print_wrap('get_dng_dir_dict')
+    print_wrap('Group the patches to make a dict.')
     for db_dir in tqdm.tqdm(raw_dir_list):
         # print(db_dir)
         # db_dir sample : D-210712_I6019L01_002___3072_3072_768_768.bz2
@@ -392,7 +392,7 @@ def DB_dir_to_paired_list(DB_dir, json_folder_dir):
         my_dict[my_key][noise_level][video_num][crop_info] = db_dir
 
     # dict to list
-    print_wrap('dict to list')
+    print_wrap('Dict to list.')
     raw_dir_list = []
     for key1 in tqdm.tqdm(my_dict.keys()):
         key2s = list(my_dict[key1].keys())

@@ -161,7 +161,8 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
 
             my_dict = {}
 
-            DB_list = DB_list[:10000]
+            # todo :
+            DB_list = DB_list
             for db_dir in tqdm.tqdm(DB_list):
 
                 if check_json and db_dir not in error_json_list:
@@ -384,8 +385,6 @@ class HumanForrestManager:
 
         if not self.my_db[my_idx][level]:
             print('------------------------------')
-            print('levels:', levels)
-            print('level :', level)
             print('Error idx :', my_idx)
             print(self.my_db[my_idx][level])
             print(self.my_db[my_idx])
