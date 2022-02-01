@@ -258,15 +258,23 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
     total_dict_error = {}
     for my_key in total_dict.keys():
         error = False
+
         for my_key2 in total_dict[my_key].keys():
             if total_dict[my_key][my_key2]:
+                len_sum = 0
                 for my_key3 in total_dict[my_key][my_key2].keys():
-                    # 05 and 06 is special case. So ignore errors from 05, 06
-                    if my_key3 != "05" and my_key3 != "06":
-                        if len(total_dict[my_key][my_key2][my_key3]) == 0:
-                            error = True
-                        if my_key3 != 'GT' and len(total_dict[my_key][my_key2][my_key3]) < 30:
-                            error = True
+
+                    # Exclude if gt is not exist.
+                    if len(total_dict[my_key][my_key2]['GT']) == 0:
+                        error = True
+
+                    #
+                    if my_key3 != 'GT':
+                        len_sum += len(total_dict[my_key][my_key2][my_key3])
+
+                if len_sum < 50:
+                    error = True
+
         if error:
             total_dict_error[my_key] = total_dict[my_key]
 
@@ -375,12 +383,13 @@ class HumanForrestManager:
             level = noise_level
 
         if not self.my_db[my_idx][level]:
-            print('------------------------------')
-            print('Error idx :', my_idx)
-            print(self.my_db[my_idx][level])
-            print(self.my_db[my_idx])
-            print('==============================')
-            quit()
+            # print('------------------------------')
+            # print('Error idx :', my_idx)
+            # print(self.my_db[my_idx][level])
+            # print(self.my_db[my_idx])
+            # print('==============================')
+            # quit()
+            return None
         else:
             if median:
                 if noisy_num == None:

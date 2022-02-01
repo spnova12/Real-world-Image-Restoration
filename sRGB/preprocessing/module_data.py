@@ -45,8 +45,8 @@ class DatasetForDataLoader(data.Dataset):
         self.db_len = self.hf_DB.get_db_len()
 
     def get_input_target_pairs(self, index, noise_level=None, noisy_num=None, median=False):
-        input, target = self.hf_DB.get_input_target_pairs(index, noise_level, noisy_num, median=median)
-        return input, target
+        v = self.hf_DB.get_input_target_pairs(index, noise_level, noisy_num, median=median)
+        return v
 
     def make_noisy_and_new_gt(self, input, target, median=False, return_noise_and_median=False):
         if median:

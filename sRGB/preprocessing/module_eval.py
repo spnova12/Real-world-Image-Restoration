@@ -59,9 +59,12 @@ class EvalModule(object):
             my_scene = []
 
             # for loop for 4 levels
-            for l in range(4):
+            for l in range(6):
                 # fix the noise number(index) as 0
-                my_scene.append(self.train_set.get_input_target_pairs(index=idx * interval, noise_level=l+1, noisy_num=0, median=median))
+                v = self.train_set.get_input_target_pairs(index=idx * interval, noise_level=l + 1, noisy_num=0,
+                                                      median=median)
+                if v:
+                    my_scene.append(v)
             eval_set.append(my_scene)
 
         return eval_set
