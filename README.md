@@ -15,7 +15,7 @@ Dataset structure
       `└──...`   
 
 
-## Installation  
+## Installation
 - Requirements
 
     ```
@@ -28,9 +28,10 @@ Dataset structure
     rawpy
     scikit_image
     skimage
-    torch==1.7.1
+    torch==1.7.1 (CUDA 11.0 is recommended)
     torchvision
     tqdm
+    pyexiv2
     ```
   
 - pyexiv2  
@@ -43,6 +44,20 @@ Dataset structure
     apt install libboost-python-dev
     pip install py3exiv2
     ```   
+  
+## Installation inside specific environments - docker  
+
+- doker image
+   ```shell
+   docker pull spnova12/img_restoration:latest
+   ```
+- example
+   ```
+  docker run -it --rm --gpus all --ipc=host -v /nvme2-2/human_and_forest/database/:/works/database -v /nvme2-2/human_and_forest/project:/works/project spnova12/img_restoration:latest
+  cd /works/project/
+  git clone https://github.com/spnova12/Real-world-Image-Restoration.git 
+  cd Real-world-Image-Restoration/
+  ```
 
   
 ## Quick Run
