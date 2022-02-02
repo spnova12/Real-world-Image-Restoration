@@ -48,7 +48,7 @@ def read_text(filename):
     return my_list
 
 
-def write_text(filename, new_item):
+def write_text(filename, new_item, valid_path_start_idx):
     """
     Write text if the text is not in the file.
     new_item can be list or not
@@ -61,10 +61,19 @@ def write_text(filename, new_item):
         new_item_list.append(new_item)
 
     for new_item_ in new_item_list:
+
+        new_item_ = '/'.join(new_item_.split('/')[valid_path_start_idx:])
+
         if not new_item_ in my_list:
             with open(filename, "a") as f:
                 f.write(f"{new_item_}\n")
 
+def is_dir_in_list(dir, list, valid_path_start_idx):
+    my_item = '/'.join(dir.split('/')[valid_path_start_idx:])
+    if my_item in list:
+        return True
+    else:
+        return False
 
 
 def get_screens(json_dir):
@@ -156,17 +165,14 @@ class JsonErrorFinder:
         my_json = os.path.splitext(DNG_dir)[0] + '_0001.json'
 
         if not os.path.isfile(my_json):
-            write_text(self.json_error_txt, DNG_dir)
+            write_text(self.json_error_txt, DNG_dir, -2)
             return DNG_dir
         else:
             drawImg = get_screens(my_json)
             if drawImg is None:
-                write_text(self.json_error_txt, DNG_dir)
+                write_text(self.json_error_txt, DNG_dir, -2)
                 return DNG_dir
 
-
-def print_in_function():
-    this_function_name = sys._getframe().f_code.co_name
 
 def get_dng_dir_dict(DNG_dir_list):
 

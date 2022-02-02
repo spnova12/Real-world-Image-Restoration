@@ -3,7 +3,7 @@ from rawRGB.preprocessing.check_patches_findbestpairs import check_patches_findb
 
 def preprocessing(DB_dir):
     # (1) find json error, find DB errors, delete bad GTs, generate patches.
-    # init_raw_DB(DB_dir)
+    init_raw_DB(DB_dir)
 
     # (2) delete bad noises.
     check_patches_findbestpairs(DB_dir)

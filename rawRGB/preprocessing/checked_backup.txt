@@ -1,8 +1,0 @@
-/home/lab/works/datasets/ssd2/human_and_forest/DB_in_DataSet/01
-/home/lab/works/datasets/ssd2/human_and_forest/DB_in_DataSet/02
-/home/lab/works/datasets/ssd2/human_and_forest/DB_in_DataSet/03
-/home/lab/works/datasets/ssd2/human_and_forest/DB_in_DataSet/04
-/home/lab/works/datasets/ssd2/human_and_forest/DB_in_DataSet/05
-/home/lab/works/datasets/ssd2/human_and_forest/DB_in_DataSet/06
-/home/lab/works/datasets/ssd2/human_and_forest/DB_in_DataSet/07
-/home/lab/works/datasets/ssd2/human_and_forest/DB_in_DataSet/08

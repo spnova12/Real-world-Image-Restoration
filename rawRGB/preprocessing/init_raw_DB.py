@@ -12,6 +12,7 @@ def init_raw_DB(DB_dir):
     # only directories (except wrong folders)
     RAW_version_list = [tempdir for tempdir in RAW_version_list if os.path.isdir(tempdir)]
 
+    print(f"\n:: rawRGB DB list : \n{[os.path.basename(bname) for bname in RAW_version_list]}")
 
     # mkdir for RAW_patches
     for RAW_version in RAW_version_list:
@@ -21,7 +22,10 @@ def init_raw_DB(DB_dir):
     # Exclude what has already checked.
     checked_txt = f'{preprocessing_dir}/checked.txt'
     checked_RAW_version_list = read_text(checked_txt)
-    RAW_version_list = [tempdir for tempdir in RAW_version_list if tempdir not in checked_RAW_version_list]
+    RAW_version_list = [tempdir for tempdir in RAW_version_list
+                        if not is_dir_in_list(tempdir, checked_RAW_version_list, -1)]
+
+    print(f"\n:: rawRGB DB list (Unverified): \n{[os.path.basename(bname) for bname in RAW_version_list]}")
 
 
     # Get all the DNG dirs to list.
@@ -31,7 +35,8 @@ def init_raw_DB(DB_dir):
     # Exclude loaded json error.
     json_error_txt = f'{preprocessing_dir}/error_report_json.txt'
     DNG_dir_list_with_json_error = read_text(json_error_txt)
-    DNG_dir_list = [tempdir for tempdir in DNG_dir_list if tempdir not in DNG_dir_list_with_json_error]
+    DNG_dir_list = [tempdir for tempdir in DNG_dir_list
+                    if not is_dir_in_list(tempdir, DNG_dir_list_with_json_error, -2)]
 
 
     # Find and save new json error.
@@ -71,4 +76,13 @@ def init_raw_DB(DB_dir):
 
 
     # Write RAW_version_list after it checked.
-    write_text(checked_txt, RAW_version_list)
+    write_text(checked_txt, RAW_version_list, -1)
+
+
+
+if __name__=="__main__":
+    a = read_text('error_report_json_backup.txt')
+
+    a = ['/'.join(b.split('/')[-2:]) for b in a]
+    write_text('error_report_json.txt', a, 0)
+    print(a)
