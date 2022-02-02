@@ -98,7 +98,10 @@ Dataset structure
     python init.py -mode sRGB -train_align_net -exp_name snow001 -noise_type S -cuda_num 2  
    
     # lowlight  
-    python init.py -mode sRGB -train_align_net -exp_name lowl001 -noise_type L -cuda_num 3  
+    python init.py -mode sRGB -train_align_net -exp_name lowl001 -noise_type L -cuda_num 3
+   
+    # dust  
+    python init.py -mode sRGB -train_align_net -exp_name dust001 -noise_type D -cuda_num 4    
    ```
 
 ### 2. rawRGB

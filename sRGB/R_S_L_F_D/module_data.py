@@ -9,10 +9,10 @@ import torch.utils.data as data
 import random
 import cv2
 
-from common.module_DB_manager import HumanForrestManager, get_sky, MedianImgs
+from sRGB.preprocessing.module_DB_manager import HumanForrestManager, get_sky, MedianImgs
 
 import sys
-import common.module_utils as utils
+import sRGB.common.module_utils as utils
 
 import torchvision.transforms as transforms
 import torch

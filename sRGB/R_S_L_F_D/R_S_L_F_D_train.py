@@ -6,10 +6,10 @@ import os
 from torch.utils.data import DataLoader
 import torch
 
-import common.module_utils as utils
-import d1_rain.module_data as module_data
-import d1_rain.module_eval as module_eval
-import d1_rain.module_train as module_train
+import sRGB.common.module_utils as utils
+import sRGB.R_S_L_F_D.module_data as module_data
+import sRGB.R_S_L_F_D.module_eval as module_eval
+import sRGB.R_S_L_F_D.module_train as module_train
 
 import argparse
 
@@ -19,34 +19,42 @@ import torch.backends.cudnn as cudnn
 cudnn.benchmark = True
 
 # <><><> 사용할 net architecture 선택하기.
-import common_net.MPRNet as MPRNet
-import common_net.GRDN as GRDN
+import sRGB.common_net.MPRNet as MPRNet
+import sRGB.common_net.GRDN as GRDN
 
 
-def main():
+def main(exp_name, hf_DB_dir, noise_type, pre_trained_align_net_dir, cuda_num=None):
     # pytorch 버전 출력하기.
     print('\n===> Pytorch version :', torch.__version__)
 
     # <><><> 사용할 gpu 번호. (multi gpu 를 사용하려면 '0 으로 하고, DataParallel 을 True 로 해줌)
-    cuda_num = 0
-    DataParallel = True
+    # If cuda_num == None -> it means using DataParallel.
+    if cuda_num == None:
+        cuda_num = 0
+        DataParallel = True
+    else:
+        DataParallel = False
 
     # <><><> 실험 이름.
-    exp_name = f'R002'
+    # exp_name = f'R002'
     exp_dir = utils.make_dirs(f'train-out/{exp_name}')
     print(f'\n===> exp_name : {exp_name}')
 
     # <><><> hf_DB_dir
-    hf_DB_dir = '/home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C'
+    # hf_DB_dir = '/home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C'
 
     # <><><> noise type ('R', 'F', 'D', 'S', 'L' : Rain, Fog, Dust, Snow, Lowlight)
-    noise_type = 'R'
+    # noise_type = 'R'
 
     # <><><> noise level
     my_noise_level = 4
 
-    # <><><> DB with Median
-    median = True
+    # <><><> DB with Median depend on noise type.
+    if noise_type == 'R' or noise_type == 'S':
+        median = True
+    else:
+        median = False
+
     edge_lambda = 1
     color_lambda = 1.5
     sigma = 3

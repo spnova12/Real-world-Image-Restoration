@@ -5,7 +5,7 @@ import sys
 import yaml
 
 import rawRGB.train as rawRGB_train
-# import sRGB.train as sRGBp
+import sRGB.train as sRGB_train
 
 
 parser = argparse.ArgumentParser(description='Init')
@@ -19,6 +19,7 @@ with open('dirs.yaml') as f:
 
 
 if args.mode == 'sRGB':
+    sRGB_train.
     pass
 
 
