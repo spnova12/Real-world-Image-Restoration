@@ -201,7 +201,10 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
 
                         # check image size.
                         size_error = False
-                        if not is_dir_in_list(db_dir, error_size_list, -2) and not is_version_in_R_F_D_S_C_list:
+
+                        if is_dir_in_list(db_dir, error_size_list, -2):
+                            size_error = True
+                        elif not is_version_in_R_F_D_S_C_list:
                             img_temp = Image.open(db_dir)
                             w, h = img_temp.size
                             if w != 1920 or h != 1080:
