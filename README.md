@@ -44,10 +44,7 @@ Dataset structure
     pip install py3exiv2
     ```   
 
-
-
-
-
+  
 ## Quick Run
 
 ## Training and Evaluation
