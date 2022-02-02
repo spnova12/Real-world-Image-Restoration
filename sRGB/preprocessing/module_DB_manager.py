@@ -125,6 +125,9 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
     error_json_list_dir = f'{preprocessing_dir}/error_json_list.txt'
     error_json_list = read_text(error_json_list_dir)
 
+    error_size_list_dir = f'{preprocessing_dir}/error_size_list.txt'
+    error_size_list = read_text(error_size_list_dir)
+
     # init my_dict_per_version
     my_dict_per_version = []
 
@@ -134,7 +137,7 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
     # If the DB's json is checked than skip reading this.
     R_F_D_S_C_checked_txt = f"{preprocessing_dir}/R_F_D_S_C_checked.txt"
     R_F_D_S_C_list = []
-    if check_json and os.path.isfile(R_F_D_S_C_checked_txt):
+    if os.path.isfile(R_F_D_S_C_checked_txt):
         R_F_D_S_C_list = read_text(R_F_D_S_C_checked_txt)
 
     ############################################################################################################
@@ -145,7 +148,11 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
 
         version_base_name = os.path.basename(version_dir)
 
-        if check_json and version_dir in R_F_D_S_C_list:
+        is_version_in_R_F_D_S_C_list = False
+        if version_dir in R_F_D_S_C_list:
+            is_version_in_R_F_D_S_C_list = True
+
+        if check_json and is_version_in_R_F_D_S_C_list:
             print(f'\n:: {version_base_name} has already been verified')
             lets_check_db = False
         else:
@@ -164,26 +171,32 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
             # todo :
             DB_list = DB_list
             for db_dir in tqdm.tqdm(DB_list):
+                have_error = False
 
-                if check_json and db_dir not in error_json_list:
+                if db_dir in error_json_list:
+                    have_error = True
+
+                if check_json and not have_error:
                     my_json = os.path.splitext(db_dir)[0] + '.json'
                     drawImg = get_sky(my_json)
                     if drawImg is None:
                         error_json_list_new.append(db_dir)
+                        have_error = True
 
-                if db_dir not in error_json_list:
+                if not have_error:
                     # read only image not json.
                     my_format = os.path.splitext(db_dir)[-1]
 
                     if my_format in ['.jpg', '.png']:
 
                         # check image size.
-                        img_temp = Image.open(db_dir)
-                        w, h = img_temp.size
                         size_error = False
-                        if w != 1920 or h != 1080:
-                            size_error = True
-                            # print('size error :', db_dir, w, h)
+                        if (db_dir not in error_size_list) and not is_version_in_R_F_D_S_C_list:
+                            img_temp = Image.open(db_dir)
+                            w, h = img_temp.size
+                            if w != 1920 or h != 1080:
+                                write_text(error_size_list_dir, db_dir)
+                                size_error = True
 
                         if not size_error:
                             # (1) date
