@@ -86,7 +86,7 @@ def read_text(filename):
     return my_list
 
 
-def write_text(filename, new_item):
+def write_text(filename, new_item, valid_path_start_idx):
     """
     Write text if the text is not in the file.
     new_item can be list or not
@@ -99,9 +99,19 @@ def write_text(filename, new_item):
         new_item_list.append(new_item)
 
     for new_item_ in new_item_list:
+
+        new_item_ = '/'.join(new_item_.split('/')[valid_path_start_idx:])
+
         if not new_item_ in my_list:
             with open(filename, "a") as f:
                 f.write(f"{new_item_}\n")
+
+def is_dir_in_list(dir, list, valid_path_start_idx):
+    my_item = '/'.join(dir.split('/')[valid_path_start_idx:])
+    if my_item in list:
+        return True
+    else:
+        return False
 
 
 def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
@@ -149,7 +159,7 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
         version_base_name = os.path.basename(version_dir)
 
         is_version_in_R_F_D_S_C_list = False
-        if version_dir in R_F_D_S_C_list:
+        if is_dir_in_list(version_dir, R_F_D_S_C_list, -1):
             is_version_in_R_F_D_S_C_list = True
 
         if check_json and is_version_in_R_F_D_S_C_list:
@@ -173,7 +183,7 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
             for db_dir in tqdm.tqdm(DB_list):
                 have_error = False
 
-                if db_dir in error_json_list:
+                if is_dir_in_list(db_dir, error_json_list, -2):
                     have_error = True
 
                 if check_json and not have_error:
@@ -191,11 +201,11 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
 
                         # check image size.
                         size_error = False
-                        if (db_dir not in error_size_list) and not is_version_in_R_F_D_S_C_list:
+                        if not is_dir_in_list(db_dir, error_size_list, -2) and not is_version_in_R_F_D_S_C_list:
                             img_temp = Image.open(db_dir)
                             w, h = img_temp.size
                             if w != 1920 or h != 1080:
-                                write_text(error_size_list_dir, db_dir)
+                                write_text(error_size_list_dir, db_dir, -2)
                                 size_error = True
 
                         if not size_error:
@@ -238,13 +248,13 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
             my_dict_per_version.append(my_dict)
 
             # backup. (save error json list)
-            write_text(error_json_list_dir, error_json_list_new)
+            write_text(error_json_list_dir, error_json_list_new, -2)
             print(f':: Each json Error information : {len(error_json_list_new)} '
                   f'(It is excluded from the training data set. check error_json_list.txt)')
 
         # back up.
         if lets_check_db:
-            write_text(R_F_D_S_C_checked_txt, version_dir)
+            write_text(R_F_D_S_C_checked_txt, version_dir, -1)
 
 
 
@@ -480,3 +490,10 @@ def get_sky(json_dir):
 
     return drawImg
 
+
+if __name__=="__main__":
+    a = read_text('error_json_list_backup.txt')
+
+    a = ['/'.join(b.split('/')[-2:]) for b in a]
+    write_text('error_json_list.txt', a, 0)
+    print(a)
