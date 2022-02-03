@@ -210,6 +210,9 @@ def noisy_gt_aligner_train(exp_name, hf_DB_dir, noise_type, cuda_num=None):
 
     stop = False
 
+    import time
+    start = time.time()
+
     while True:
         if iter_total <= iter_count:
             stop = True
@@ -242,7 +245,8 @@ def noisy_gt_aligner_train(exp_name, hf_DB_dir, noise_type, cuda_num=None):
                     f'exp_name:{exp_name} | '
                     f'epoch:{(iter_count-1)//iter_save_model + 1}/{epoch_total} | '
                     f'iter:{iter_count} | '
-                    f'logs_average:{logs_dict_average}')
+                    f'logs_average:{logs_dict_average} | '
+                    f'time:{time.time()-start:.3f}')
 
             ####################################################################################
             # 모델 저장하기
