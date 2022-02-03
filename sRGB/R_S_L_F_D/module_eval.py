@@ -25,12 +25,11 @@ def numpyPSNR(tar_img, prd_img):
 
 
 class EvalModule(object):
-    def __init__(self, train_set, net_dict, additional_info, cuda_num, median=False, noise_level=None):
+    def __init__(self, train_set, net_dict, additional_info, cuda_num, median=False):
         # Use train set for eval!
         self.train_set = train_set
 
         self.median = median
-        self.noise_level = noise_level
 
         # my eval set from train set
         self.eval_set = self.get_eval_set(self.median)
@@ -65,15 +64,13 @@ class EvalModule(object):
             # for each noise level
             my_scene = []
 
-            if self.noise_level is not None:
+            # for loop for 4 levels
+            for l in range(6):
                 # fix the noise number(index) as 0
-                my_scene.append(self.train_set.get_input_target_pairs(index=idx * interval, noise_level=self.noise_level, noisy_num=0, median=median))
-            else:
-                # for loop for 4 levels
-                for l in range(4):
-                    # fix the noise number(index) as 0
-                    my_scene.append(self.train_set.get_input_target_pairs(index=idx * interval, noise_level=l+1, noisy_num=0, median=median))
-
+                v = self.train_set.get_input_target_pairs(index=idx * interval, noise_level=l+1, noisy_num=0,
+                                                          median=median)
+                if v:
+                    my_scene.append(v)
             eval_set.append(my_scene)
 
         return eval_set

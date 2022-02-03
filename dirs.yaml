@@ -1,6 +1,16 @@
 
+
 rawRGB:
   DB_dir: '/home/lab/works/datasets/ssd2/human_and_forest/DB_in_DataSet'
 
 sRGB:
   DB_dir: '/home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C'
+
+
+
+pretrain_net_dir_for_align:
+  R : '/hdd1/works/projects/human_and_forest/Real_world_Image_Restoration/train-out/rain001/checkpoint_023000.pth'
+  F : '/home/lab/works/projects/human_and_forest/Real_world_Image_Restoration/train-out/fog001/checkpoint_060000.pth'
+  D :
+  S : '/home/lab/works/projects/human_and_forest/Real_world_Image_Restoration/train-out/snow002/checkpoint_011000.pth'
+  L :

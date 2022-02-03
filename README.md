@@ -93,7 +93,7 @@ Dataset structure
    
     # fog  
     python init.py -mode sRGB -train_align_net -exp_name fog001 -noise_type F -cuda_num 1  
-       
+   
     # snow  
     python init.py -mode sRGB -train_align_net -exp_name snow001 -noise_type S -cuda_num 2  
    
@@ -105,8 +105,21 @@ Dataset structure
    ```
 6. Train image restoration network.
     ```shell
-    python train.py -mode sRGB -exp_name de_rain001 -noise_type R -align_net_pth {} -cuda_num 0
-    ```
+   # rain  
+   python train.py -mode sRGB -exp_name de_rain001 -noise_type R -cuda_num 0
+   
+   # fog
+   python train.py -mode sRGB -exp_name de_fog001 -noise_type F -cuda_num 0
+   
+   # snow
+   python train.py -mode sRGB -exp_name de_snow001 -noise_type S -cuda_num 0
+   
+   # lowlight  
+   python train.py -mode sRGB -exp_name de_lowl001 -noise_type L -cuda_num 0
+   
+   # dust  
+   python train.py -mode sRGB -exp_name de_dustl001 -noise_type D -cuda_num 0
+   ```
 
 ### 2. rawRGB
 1. Download Dataset.

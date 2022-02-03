@@ -13,7 +13,6 @@ parser.add_argument('-mode', default='None', type=str)
 parser.add_argument('-exp_name', default='rawRGB000', type=str)
 parser.add_argument('-noise_type', default='R', type=str)
 parser.add_argument('-cuda_num', default=None, type=str)
-parser.add_argument('-align_net_pth', default=None, type=str)
 args = parser.parse_args()
 
 # read yaml.
@@ -22,7 +21,8 @@ with open('dirs.yaml') as f:
 
 
 if args.mode == 'sRGB':
-    sRGB_train.train(args.exp_name, dirs['sRGB']['DB_dir'], args.noise_type, args.align_net_pth, args.cuda_num)
+    sRGB_train.train(args.exp_name, dirs['sRGB']['DB_dir'], args.noise_type,
+                     dirs['pretrain_net_dir_for_align'][args.noise_type], args.cuda_num)
 
 
 elif args.mode == 'rawRGB':

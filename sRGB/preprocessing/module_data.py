@@ -91,12 +91,16 @@ class DatasetForDataLoader(data.Dataset):
                 return my_median_img, new_gt_img
 
         else:
+            # noisy
+            my_noisy_img = cv2.imread(input)
+
             my_json = os.path.splitext(input)[0] + '.json'
             drawImg = get_sky(my_json)
 
             if crop:
                 drawImg = drawImg[top: top + self.ipsize, left: left + self.ipsize]
                 my_gt_img = my_gt_img[top: top + self.ipsize, left: left + self.ipsize]
+                my_noisy_img = my_noisy_img[top: top + self.ipsize, left: left + self.ipsize]
 
             # blur to sky label mask
             sd = 8
@@ -106,12 +110,7 @@ class DatasetForDataLoader(data.Dataset):
             drawImg = np.clip(drawImg, 0, 255)
             drawImg = drawImg / 255
 
-            # noisy
-            my_noisy_img = cv2.imread(input)
-
             # target
-            if my_noisy_img.shape[0] != 1080:
-                print(input, my_noisy_img.shape, drawImg.shape)
             clouds = my_noisy_img * drawImg
             forground = my_gt_img * (1 - drawImg)
             new_gt_img = clouds + forground

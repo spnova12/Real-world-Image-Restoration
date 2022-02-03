@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 import torch
 
 import sRGB.common.module_utils as utils
-import sRGB.R_S_L_F_D.module_data as module_data
+import sRGB.preprocessing.module_data as module_data
 import sRGB.R_S_L_F_D.module_eval as module_eval
 import sRGB.R_S_L_F_D.module_train as module_train
 
@@ -23,7 +23,7 @@ import sRGB.common_net.MPRNet as MPRNet
 import sRGB.common_net.GRDN as GRDN
 
 
-def main(exp_name, hf_DB_dir, noise_type, pre_trained_align_net_pth, cuda_num=None):
+def main(exp_name, hf_DB_dir, noise_type, pretrain_net_dir_for_align, cuda_num=None):
     # pytorch 버전 출력하기.
     print('\n===> Pytorch version :', torch.__version__)
 
@@ -46,9 +46,6 @@ def main(exp_name, hf_DB_dir, noise_type, pre_trained_align_net_pth, cuda_num=No
     # <><><> noise type ('R', 'F', 'D', 'S', 'L' : Rain, Fog, Dust, Snow, Lowlight)
     # noise_type = 'R'
 
-    # <><><> noise level
-    my_noise_level = 4
-
     # <><><> DB with Median depend on noise type.
     if noise_type == 'R' or noise_type == 'S':
         median = True
@@ -57,13 +54,12 @@ def main(exp_name, hf_DB_dir, noise_type, pre_trained_align_net_pth, cuda_num=No
 
     edge_lambda = 1
     color_lambda = 1.5
-    sigma = 3
 
     # <><><> checkpoint version
     checkpoint_version = 'checkpoint_last.pth'
 
     # <><><> checkpoint version for netA
-    checkpoint_version_A_pre = pre_trained_align_net_pth
+    checkpoint_version_A_pre = pretrain_net_dir_for_align
     if not os.path.isfile(checkpoint_version_A_pre):
         raise SystemExit(": no checkpoint found at '{}'".format(checkpoint_version_A_pre))
 
@@ -96,7 +92,7 @@ def main(exp_name, hf_DB_dir, noise_type, pre_trained_align_net_pth, cuda_num=No
             noise_type,
             additional_info=additional_info,
             median=median,
-            noise_level=my_noise_level
+            return_noise_and_median=median
         )
 
         # 학습 전에 항상 train_loader 을 초기화 해준다.
@@ -142,7 +138,8 @@ def main(exp_name, hf_DB_dir, noise_type, pre_trained_align_net_pth, cuda_num=No
 
     # training 시킬 객체 만들어주기.
     Train = module_train.TrainModule(cuda_num, DataParallel,
-                                     edge_lambda=edge_lambda, color_lambda=color_lambda, sigma=sigma)
+                                     edge_lambda=edge_lambda, color_lambda=color_lambda,
+                                     median=median)
 
     # 초기 lr 설정해주기.
     Train.set_init_lr(init_lr=train_scheduler['init_lr'])
@@ -182,10 +179,14 @@ def main(exp_name, hf_DB_dir, noise_type, pre_trained_align_net_pth, cuda_num=No
     # Align img with A_pre net and save tile image.
     if net_dict['A_pre'] is not None:
         with torch.no_grad():
-            # todo. when no median.
-            target = net_dict['A_pre'](
-                batch_sample['median_img'].cuda(),
-                batch_sample['target_img'].cuda()).clone().detach()
+            if median:
+                target = net_dict['A_pre'](
+                    batch_sample['median_img'].cuda(),
+                    batch_sample['target_img'].cuda()).clone().detach()
+            else:
+                target = net_dict['A_pre'](
+                    batch_sample['input_img'].cuda(),
+                    batch_sample['target_img'].cuda()).clone().detach()
             write_sample_tensor(target.cpu(), 'target_img_aligned')
 
     # 뽑은 sample 을 tile 형태로 저장해본다.
@@ -203,8 +204,7 @@ def main(exp_name, hf_DB_dir, noise_type, pre_trained_align_net_pth, cuda_num=No
         net_dict=net_dict,
         additional_info=additional_info,
         cuda_num=cuda_num,
-        median=median,
-        noise_level=my_noise_level
+        median=median
     )
     print(f'\n===> test set setting... (This may take some time.)')
     psnr_dict = evals.save_input_and_target(utils.make_dirs(f'{exp_dir}/evals'))
@@ -294,7 +294,7 @@ def main(exp_name, hf_DB_dir, noise_type, pre_trained_align_net_pth, cuda_num=No
 
 
                 # 가장 최신 iter 에 해당하는 모델을 저장해준다.
-                Train.weight_saver(f'{exp_dir}/checkpoint_{str(iter_count).zfill(6)}.pth', iter_count, best_psnr)
+                # Train.weight_saver(f'{exp_dir}/checkpoint_{str(iter_count).zfill(6)}.pth', iter_count, best_psnr)
                 Train.weight_saver(f'{exp_dir}/checkpoint_last.pth', iter_count, best_psnr)
 
 

@@ -18,7 +18,7 @@ cudnn.benchmark = True
 
 class TrainModule(object):
 
-    def __init__(self, cuda_num, DataParallel=False, edge_lambda=1, color_lambda=1, sigma=4):
+    def __init__(self, cuda_num, DataParallel=False, edge_lambda=1, color_lambda=1, median=False):
         # training 과정 중 관찰할 log 들을 저장할 dict 만들어주기.
         self.logs_dict = {}
         self.logs_dict_sum = {}
@@ -38,6 +38,8 @@ class TrainModule(object):
         self.color_lambda = color_lambda
 
         self.netA = None
+
+        self.median = median
 
     def set_init_lr(self, init_lr):
         # 초기 learning rate 설정해주기.
@@ -164,13 +166,18 @@ class TrainModule(object):
     def optimize_parameters(self, batch):
         ##
         input = batch['input_img'].to(self.device)
-        median = batch['median_img'].to(self.device)
         target = batch['target_img'].to(self.device)
 
         ##
-        if self.netA is not None:
-            with torch.no_grad():
-                target = self.netA(median, target).clone().detach()
+        if self.median:
+            median = batch['median_img'].to(self.device)
+            if self.netA is not None:
+                with torch.no_grad():
+                    target = self.netA(median, target).clone().detach()
+        else:
+            if self.netA is not None:
+                with torch.no_grad():
+                    target = self.netA(input, target).clone().detach()
 
         ##
         restored = self.netG(input)
