@@ -49,13 +49,28 @@ class DatasetForDataLoader(data.Dataset):
         v = self.hf_DB.get_input_target_pairs(index, noise_level, noisy_num, median=median)
         return v
 
-    def make_noisy_and_new_gt(self, input, target, median=False, return_noise_and_median=False):
+    def make_noisy_and_new_gt(self, input, target, median=False, return_noise_and_median=False, crop=False):
+
+        my_gt_img = cv2.imread(target)
+
+        left = None
+        top = None
+        if crop:
+            h_input, w_input = my_gt_img.shape[0], my_gt_img.shape[1]
+            # input_img 영역을 벗어나지 않는 범위 내에서, input_img 에서 crop 할 좌상단의 좌표를 구한다.
+            left = np.random.randint(0, w_input - self.ipsize)  # Make margin as 0.
+            top = np.random.randint(0, h_input - self.ipsize)
+
         if median:
-            median_imgs = MedianImgs(input)
+            median_imgs = MedianImgs(input, left, top, self.ipsize)
             my_median_img = median_imgs.get_median_result()
 
             my_json = os.path.splitext(input[0])[0] + '.json'
             drawImg = get_sky(my_json)
+
+            if crop:
+                drawImg = drawImg[top: top + self.ipsize, left: left + self.ipsize]
+                my_gt_img = my_gt_img[top: top + self.ipsize, left: left + self.ipsize]
 
             # blur to sky label mask
             sd = 8
@@ -65,8 +80,6 @@ class DatasetForDataLoader(data.Dataset):
             drawImg = np.clip(drawImg, 0, 255)
             drawImg = drawImg / 255
 
-            # target
-            my_gt_img = cv2.imread(target)
             clouds = my_median_img * drawImg
             forground = my_gt_img * (1 - drawImg)
             new_gt_img = clouds + forground
@@ -81,6 +94,10 @@ class DatasetForDataLoader(data.Dataset):
             my_json = os.path.splitext(input)[0] + '.json'
             drawImg = get_sky(my_json)
 
+            if crop:
+                drawImg = drawImg[top: top + self.ipsize, left: left + self.ipsize]
+                my_gt_img = my_gt_img[top: top + self.ipsize, left: left + self.ipsize]
+
             # blur to sky label mask
             sd = 8
             truncate = 2
@@ -93,7 +110,6 @@ class DatasetForDataLoader(data.Dataset):
             my_noisy_img = cv2.imread(input)
 
             # target
-            my_gt_img = cv2.imread(target)
             if my_noisy_img.shape[0] != 1080:
                 print(input, my_noisy_img.shape, drawImg.shape)
             clouds = my_noisy_img * drawImg
@@ -107,9 +123,7 @@ class DatasetForDataLoader(data.Dataset):
         return self.hf_DB.get_db_len()
 
 
-    def np_img_to_tensor_patch(self, np_img, left, top, rote_mode, flip_mode):
-        # crop
-        np_img = np_img[top: top + self.ipsize, left: left + self.ipsize]
+    def np_img_to_tensor_patch(self, np_img, rote_mode, flip_mode):
         # rotate
         np_img = utils.np_random_rotate(np_img, rote_mode)
         # flip
@@ -130,23 +144,20 @@ class DatasetForDataLoader(data.Dataset):
 
         median_img = None
         if self.return_noise_and_median:
-            my_noisy_img, median_img, new_gt_img = self.make_noisy_and_new_gt(input, target, median=median, return_noise_and_median=self.return_noise_and_median)
+            my_noisy_img, median_img, new_gt_img = self.make_noisy_and_new_gt(
+                input, target, median=median, return_noise_and_median=self.return_noise_and_median, crop=True)
         else:
-            my_noisy_img, new_gt_img = self.make_noisy_and_new_gt(input, target, median=median)
+            my_noisy_img, new_gt_img = self.make_noisy_and_new_gt(
+                input, target, median=median, crop=True)
 
-        h_input, w_input = my_noisy_img.shape[0], my_noisy_img.shape[1]
-
-        # input_img 영역을 벗어나지 않는 범위 내에서, input_img 에서 crop 할 좌상단의 좌표를 구한다.
-        left = np.random.randint(0, w_input - self.ipsize)  # Make margin as 0.
-        top = np.random.randint(0, h_input - self.ipsize)
         rote_mode = np.random.randint(4)
         flip_mode = np.random.randint(2)
 
-        input_img = self.np_img_to_tensor_patch(my_noisy_img, left, top, rote_mode, flip_mode)
-        target_img = self.np_img_to_tensor_patch(new_gt_img, left, top, rote_mode, flip_mode)
+        input_img = self.np_img_to_tensor_patch(my_noisy_img, rote_mode, flip_mode)
+        target_img = self.np_img_to_tensor_patch(new_gt_img, rote_mode, flip_mode)
 
         if self.return_noise_and_median:
-            median_img = self.np_img_to_tensor_patch(median_img, left, top, rote_mode, flip_mode)
+            median_img = self.np_img_to_tensor_patch(median_img, rote_mode, flip_mode)
             return {'input_img': input_img, 'target_img': target_img, 'median_img': median_img}
 
         return {'input_img': input_img, 'target_img': target_img}

@@ -40,7 +40,7 @@ def median_imgs(img_dirs):
 
 
 class MedianImgs():
-    def __init__(self, img_dirs):
+    def __init__(self, img_dirs, left=None, top=None, ipsize=None):
         self.imgs_list = []
 
         imgs_r = []
@@ -49,6 +49,11 @@ class MedianImgs():
 
         for img_dir in img_dirs:
             img = cv2.imread(img_dir)
+
+            if left:
+                # crop
+                img = img[top: top + ipsize, left: left + ipsize]
+
             self.imgs_list.append(img)
             imgs_b.append(img[:, :, 0])
             imgs_g.append(img[:, :, 1])
