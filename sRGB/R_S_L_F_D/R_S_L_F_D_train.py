@@ -23,7 +23,7 @@ import sRGB.common_net.MPRNet as MPRNet
 import sRGB.common_net.GRDN as GRDN
 
 
-def main(exp_name, hf_DB_dir, noise_type, pre_trained_align_net_dir, cuda_num=None):
+def main(exp_name, hf_DB_dir, noise_type, pre_trained_align_net_pth, cuda_num=None):
     # pytorch 버전 출력하기.
     print('\n===> Pytorch version :', torch.__version__)
 
@@ -63,7 +63,7 @@ def main(exp_name, hf_DB_dir, noise_type, pre_trained_align_net_dir, cuda_num=No
     checkpoint_version = 'checkpoint_last.pth'
 
     # <><><> checkpoint version for netA
-    checkpoint_version_A_pre = 'train-out/018/checkpoint_008000.pth'
+    checkpoint_version_A_pre = pre_trained_align_net_pth
     if not os.path.isfile(checkpoint_version_A_pre):
         raise SystemExit(": no checkpoint found at '{}'".format(checkpoint_version_A_pre))
 

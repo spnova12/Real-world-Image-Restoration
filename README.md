@@ -103,6 +103,10 @@ Dataset structure
     # dust  
     python init.py -mode sRGB -train_align_net -exp_name dust001 -noise_type D -cuda_num 4    
    ```
+6. Train image restoration network.
+    ```shell
+    python train.py -mode sRGB -exp_name de_rain001 -noise_type R -align_net_pth {} -cuda_num 0
+    ```
 
 ### 2. rawRGB
 1. Download Dataset.

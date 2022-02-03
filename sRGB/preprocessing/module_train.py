@@ -18,7 +18,7 @@ cudnn.benchmark = True
 
 class TrainModule(object):
 
-    def __init__(self, cuda_num, DataParallel=False, edge_lambda=1, color_lambda=1, sigma=4):
+    def __init__(self, cuda_num, DataParallel=False, edge_lambda=1, color_lambda=1, sigma=4, return_noise_and_median=False):
         # training 과정 중 관찰할 log 들을 저장할 dict 만들어주기.
         self.logs_dict = {}
         self.logs_dict_sum = {}
@@ -37,6 +37,8 @@ class TrainModule(object):
 
         self.edge_lambda = edge_lambda
         self.color_lambda = color_lambda
+
+        self.return_noise_and_median = return_noise_and_median
 
     def set_init_lr(self, init_lr):
         # 초기 learning rate 설정해주기.
@@ -153,7 +155,15 @@ class TrainModule(object):
         ##
         err_edge = self.Edge_L(target_fake, target_clone) * self.edge_lambda
         err_color = self.Color_L(target_fake, input_clone) * self.color_lambda
-        errG = err_edge + err_color
+
+        if self.return_noise_and_median:
+            median = batch['median_img'].to(self.device)
+            err_median_edge = self.Edge_L(target_fake, median) * self.edge_lambda
+            errG = err_median_edge * 0.7 + err_edge * 0.3 + err_color
+
+            self.logs_dict['err_median_edge'] = err_median_edge.item()
+        else:
+            errG = err_edge + err_color
 
         self.G_optimizer.zero_grad()
         errG.backward()

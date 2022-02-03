@@ -47,6 +47,11 @@ def noisy_gt_aligner_train(exp_name, hf_DB_dir, noise_type, cuda_num=None):
     else:
         median = False
 
+    if noise_type == 'S':
+        return_noise_and_median = True
+    else:
+        return_noise_and_median = False
+
     edge_lambda = 1
     color_lambda = 1.5
     sigma = 3
@@ -84,7 +89,8 @@ def noisy_gt_aligner_train(exp_name, hf_DB_dir, noise_type, cuda_num=None):
             hf_DB_dir,
             noise_type,
             additional_info=additional_info,
-            median=median
+            median=median,
+            return_noise_and_median=return_noise_and_median
         )
 
         # 학습 전에 항상 train_loader 을 초기화 해준다.
@@ -130,9 +136,6 @@ def noisy_gt_aligner_train(exp_name, hf_DB_dir, noise_type, cuda_num=None):
         # 몇 iteration 마다 validation 영상을 저장할 것인가. (영상만 딱 저장)
         'iter_saving_image': 1000,
 
-        # 몇 iteration 마다 vtm encoder 를 이용해서 eval 을 할 것인가.
-        'iter_run_vtm': 5000,
-
         # 총 몇 iteration 학습시킬 것인가.
         'iter_total': 5000 * 200,
 
@@ -150,7 +153,8 @@ def noisy_gt_aligner_train(exp_name, hf_DB_dir, noise_type, cuda_num=None):
 
     # training 시킬 객체 만들어주기.
     Train = module_train.TrainModule(cuda_num, DataParallel,
-                                     edge_lambda=edge_lambda, color_lambda=color_lambda, sigma=sigma)
+                                     edge_lambda=edge_lambda, color_lambda=color_lambda, sigma=sigma,
+                                     return_noise_and_median=return_noise_and_median)
 
     # 초기 lr 설정해주기.
     Train.set_init_lr(init_lr=train_scheduler['init_lr'])
