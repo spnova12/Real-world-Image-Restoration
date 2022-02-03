@@ -47,7 +47,7 @@ def noisy_gt_aligner_train(exp_name, hf_DB_dir, noise_type, cuda_num=None):
     else:
         median = False
 
-    if noise_type == 'S':
+    if noise_type == 'S' and median:
         return_noise_and_median = True
     else:
         return_noise_and_median = False
