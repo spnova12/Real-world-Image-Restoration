@@ -15,12 +15,12 @@ This project deals with the following noise images through deep learning.
 - Dataset link :   
 - Dataset structure  
 `Training Dataset`  
-  `rain`  
-  `snow`   
-  `fog`   
-  `dust`   
-  `lowlight(outdoor)`      
-  `lowlight(indoor)`   
+  `├──rain`  
+  `├──snow`   
+  `├──fog`   
+  `├──dust`   
+  `├──lowlight(outdoor)`      
+  `└──lowlight(indoor)`   
     `├──01`   
     `├──02`   
     `├──...`   
