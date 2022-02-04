@@ -120,6 +120,8 @@ Dataset structure
    # dust  
    python train.py -mode sRGB -exp_name de_dustl001 -noise_type D -cuda_num 0
    ```
+7. Test.  
+   
 
 ### 2. rawRGB
 1. Download Dataset.
@@ -143,3 +145,4 @@ Dataset structure
 ## Results
 
 ## Contact 
+Should you have any question, please contact spnova12@gmail.com

@@ -137,7 +137,7 @@ def noisy_gt_aligner_train(exp_name, hf_DB_dir, noise_type, cuda_num=None):
         'iter_saving_image': 1000,
 
         # 총 몇 iteration 학습시킬 것인가.
-        'iter_total': 5000 * 200,
+        'iter_total': 5000 * 1,
 
         # learning rate decay 할때 얼만큼 할것인가.
         'decay_rate': 0.7,
