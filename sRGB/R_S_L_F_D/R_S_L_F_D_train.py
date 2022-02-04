@@ -35,6 +35,8 @@ def main(exp_name, hf_DB_dir, noise_type, pretrain_net_dir_for_align, cuda_num=N
     else:
         DataParallel = False
 
+    device = torch.device(f'cuda:{cuda_num}')
+
     # <><><> 실험 이름.
     # exp_name = f'R002'
     exp_dir = utils.make_dirs(f'train-out/{exp_name}')
@@ -181,12 +183,12 @@ def main(exp_name, hf_DB_dir, noise_type, pretrain_net_dir_for_align, cuda_num=N
         with torch.no_grad():
             if median:
                 target = net_dict['A_pre'](
-                    batch_sample['median_img'].cuda(),
-                    batch_sample['target_img'].cuda()).clone().detach()
+                    batch_sample['median_img'].to(device),
+                    batch_sample['target_img'].to(device)).clone().detach()
             else:
                 target = net_dict['A_pre'](
-                    batch_sample['input_img'].cuda(),
-                    batch_sample['target_img'].cuda()).clone().detach()
+                    batch_sample['input_img'].to(device),
+                    batch_sample['target_img'].to(device)).clone().detach()
             write_sample_tensor(target.cpu(), 'target_img_aligned')
 
     # 뽑은 sample 을 tile 형태로 저장해본다.
