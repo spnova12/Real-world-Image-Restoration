@@ -85,6 +85,7 @@ Dataset structure
      - D : Dust   
      - S : Snow  
      - L : Lowlight    
+   - If you have pretrained model then you can skip training.
    - cuda_num None -> It means use multi gpus.
    - example  
     ```shell
@@ -107,6 +108,8 @@ Dataset structure
     ```shell
     python init.py -mode sRGB -train_align_net -exp_name {} -noise_type {} -cuda_num {}
     ```  
+   - If you have pretrained model then you can skip training.
+   - cuda_num None -> It means use multi gpus.
    - example  
     ```shell
    # rain  
@@ -146,12 +149,13 @@ Dataset structure
    ```shell
    python train.py -mode rawRGB -exp_name {} -cuda_num {}
    ```
-   If you have pretrained model then you can skip training.
+   - If you have pretrained model then you can skip training.
+   - cuda_num None -> It means use multi gpus.
    - example  
     ```shell
     python train.py -mode rawRGB -exp_name rawRGB001
     ```
-6. Test.  
+7. Test.  
 
 ## Results
 
