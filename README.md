@@ -105,6 +105,10 @@ Dataset structure
    ```
 6. Train image restoration network.
     ```shell
+    python init.py -mode sRGB -train_align_net -exp_name {} -noise_type {} -cuda_num {}
+    ```  
+   - example  
+    ```shell
    # rain  
    python train.py -mode sRGB -exp_name de_rain001 -noise_type R -cuda_num 0
    
@@ -139,7 +143,14 @@ Dataset structure
    Result bz2 patch samples are saved as 8bit sRGB through simple ISP
    in './rawRGB'.
 5. Train.  
-    If you have pretrained model then you can skip training.  
+   ```shell
+   python train.py -mode rawRGB -exp_name {} -cuda_num {}
+   ```
+   If you have pretrained model then you can skip training.
+   - example  
+    ```shell
+    python train.py -mode rawRGB -exp_name rawRGB001
+    ```
 6. Test.  
 
 ## Results

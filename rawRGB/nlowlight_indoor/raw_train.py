@@ -23,13 +23,16 @@ import rawRGB.nlowlight_indoor.module_eval as module_eval
 import rawRGB.common_net.MPRNet as MPRNet
 
 
-def main(exp_name, hf_patches_folder_dir, json_folder_dir):
+def main(exp_name, hf_patches_folder_dir, json_folder_dir, cuda_num=None):
     # pytorch 버전 출력하기.
     print('\n===> Pytorch version :', torch.__version__)
 
     # <><><> 사용할 gpu 번호. (multi gpu 를 사용하려면 '0 으로 하고, DataParallel 을 True 로 해줌)
-    cuda_num = 0
-    DataParallel = True
+    if cuda_num == None:
+        cuda_num = 0
+        DataParallel = True
+    else:
+        DataParallel = False
 
     # <><><> 실험 이름.
     # exp_name = f'raw000'

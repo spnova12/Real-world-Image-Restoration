@@ -8,7 +8,7 @@ import rawRGB.get_data_info_ as rawRGB_get_data_info
 import sRGB.get_data_info_ as sRGB_get_data_info
 
 
-parser = argparse.ArgumentParser(description='Init')
+parser = argparse.ArgumentParser(description='Get data info')
 parser.add_argument('-mode', default='None', type=str)
 args = parser.parse_args()
 

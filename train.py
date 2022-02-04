@@ -8,11 +8,13 @@ import rawRGB.train as rawRGB_train
 import sRGB.train as sRGB_train
 
 
-parser = argparse.ArgumentParser(description='Init')
+parser = argparse.ArgumentParser(description='Train')
 parser.add_argument('-mode', default='None', type=str)
 parser.add_argument('-exp_name', default='rawRGB000', type=str)
-parser.add_argument('-noise_type', default='R', type=str)
 parser.add_argument('-cuda_num', default=None, type=str)
+
+parser.add_argument('-noise_type', default='R', type=str)
+
 args = parser.parse_args()
 
 # read yaml.
@@ -26,7 +28,7 @@ if args.mode == 'sRGB':
 
 
 elif args.mode == 'rawRGB':
-    rawRGB_train.train(args.exp_name, dirs['rawRGB']['DB_dir'])
+    rawRGB_train.train(args.exp_name, dirs['rawRGB']['DB_dir'], args.cuda_num)
 
 else:
     sys.exit('mode is not correct')
