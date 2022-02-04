@@ -1,18 +1,33 @@
 # Real world Image Restoration
 
-## Overview
-rain, fog, dust, snow, lowlight(sRGB), lowlight(RAW-RGB)  
+## Overview 
+Cameras are exposed to various noises. In particular, cameras exposed outdoors 
+may be affected by various weather conditions such as rain and fog. 
+This project allows to reconstruct images that were taken in the real world 
+and affected by various noises with deep learning.
+
+This project deals with the following noise images through deep learning.
+- sRGB: low light(outdoor), rain, fog, dust, snow.
+- raw-RGB: low light(indoor)
+ 
 
 ## Datasets
-Dataset structure  
-`DB_in_DataSet`  
-  `├──01`   
-  `├──02`   
-  `├──...`   
-  `└──08`   
-      `├──D-210925_I2005L01_001.dng`   
-      `├──D-210925_I2005L01_001_0001.json`   
-      `└──...`   
+- Dataset link :   
+- Dataset structure  
+`Training Dataset`  
+  `rain`  
+  `snow`   
+  `fog`   
+  `dust`   
+  `lowlight(outdoor)`      
+  `lowlight(indoor)`   
+    `├──01`   
+    `├──02`   
+    `├──...`   
+    `└──08`   
+        `├──D-210925_I2005L01_001.dng`     
+        `├──D-210925_I2005L01_001_0001.json`     
+        `└──...`    
 
 
 ## Installation
@@ -84,8 +99,8 @@ Dataset structure
      - F : Fog  
      - D : Dust   
      - S : Snow  
-     - L : Lowlight    
-   - If you have pretrained model then you can skip training.
+     - L : Lowlight (outdoor)
+   - If you have pretrained align network then you can skip training.
    - cuda_num None -> It means use multi gpus.
    - example  
     ```shell
@@ -98,7 +113,7 @@ Dataset structure
     # snow  
     python init.py -mode sRGB -train_align_net -exp_name snow001 -noise_type S -cuda_num 2  
    
-    # lowlight  
+    # lowlight (outdoor)
     python init.py -mode sRGB -train_align_net -exp_name lowl001 -noise_type L -cuda_num 3
    
     # dust  
@@ -107,8 +122,7 @@ Dataset structure
 6. Train image restoration network.
     ```shell
     python init.py -mode sRGB -train_align_net -exp_name {} -noise_type {} -cuda_num {}
-    ```  
-   - If you have pretrained model then you can skip training.
+    ```
    - cuda_num None -> It means use multi gpus.
    - example  
     ```shell
@@ -149,10 +163,10 @@ Dataset structure
    ```shell
    python train.py -mode rawRGB -exp_name {} -cuda_num {}
    ```
-   - If you have pretrained model then you can skip training.
    - cuda_num None -> It means use multi gpus.
    - example  
     ```shell
+    # lowlight (indoor)
     python train.py -mode rawRGB -exp_name rawRGB001
     ```
 7. Test.  
