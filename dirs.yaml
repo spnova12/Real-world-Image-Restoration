@@ -9,8 +9,8 @@ sRGB:
 
 
 pretrain_net_dir_for_align:
-  R : '/hdd1/works/projects/human_and_forest/Real_world_Image_Restoration/train-out/rain001/checkpoint_023000.pth'
-  F : '/home/lab/works/projects/human_and_forest/Real_world_Image_Restoration/train-out/fog001/checkpoint_060000.pth'
-  D :
-  S : '/home/lab/works/projects/human_and_forest/Real_world_Image_Restoration/train-out/snow002/checkpoint_011000.pth'
-  L :
+  R : './train-out/rain001/checkpoint_005000.pth'
+  F : './train-out/fog001/checkpoint_005000.pth'
+  D : './train-out/dust001/checkpoint_005000.pth'
+  S : './train-out/snow002/checkpoint_005000.pth'
+  L : './train-out/lowl001/checkpoint_005000.pth'

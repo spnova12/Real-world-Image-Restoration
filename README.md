@@ -118,7 +118,7 @@ Dataset structure
    python train.py -mode sRGB -exp_name de_lowl001 -noise_type L -cuda_num 0
    
    # dust  
-   python train.py -mode sRGB -exp_name de_dustl001 -noise_type D -cuda_num 0
+   python train.py -mode sRGB -exp_name de_dust001 -noise_type D -cuda_num 0
    ```
 7. Test.  
    
