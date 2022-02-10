@@ -121,7 +121,7 @@ This project deals with the following noise images through deep learning.
    ```
 6. Train image restoration network.
     ```shell
-    python init.py -mode sRGB -train_align_net -exp_name {} -noise_type {} -cuda_num {}
+    python train.py -mode sRGB -exp_name {} -noise_type {} -cuda_num {}
     ```
    - cuda_num None -> It means use multi gpus.
    - example  
