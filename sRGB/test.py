@@ -1,20 +1,11 @@
 import argparse
 
-import d0_raw.raw_train
-# import d1_rain.rain_test
+import sRGB.R_S_L_F_D.R_S_L_F_D_test as R_S_L_F_D_test
 
-# parser = argparse.ArgumentParser(description='Argparse Tutorial')
-#
-# parser.add_argument('--train', '-train', action='store_true')
-# parser.add_argument('--test', '-test', action='store_true')
-#
-# args = parser.parse_args()
-#
-# if args.train and not args.test:
-#     d1_rain.rain_train.main()
-#
-# if not args.train and args.test:
-#     d1_rain.rain_test.main()
-#
 
-d0_raw.raw_train.main()
+def test_my_db(pretrain_net_dir_for_test, test_DB_dir_list, out_dir_name, cuda_num):
+    R_S_L_F_D_test.main(pretrain_net_dir_for_test, test_DB_dir_list, out_dir_name, cuda_num)
+
+
+
+

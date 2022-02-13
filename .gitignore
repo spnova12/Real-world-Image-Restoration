@@ -23,6 +23,8 @@
 
 *.json
 train-out
+test-out
+DB_samples
 
 
 

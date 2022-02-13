@@ -142,6 +142,9 @@ This project deals with the following noise images through deep learning.
    python train.py -mode sRGB -exp_name de_dust001 -noise_type D -cuda_num 0
    ```
 7. Test.  
+   ```shell
+   python test.py -mode sRGB -my_db -noise_type R -out_dir_name my_R -cuda_num 0
+   ```
    
 
 ### 2. rawRGB

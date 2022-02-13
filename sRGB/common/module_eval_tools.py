@@ -152,7 +152,7 @@ def recon_big_one_frame(input_big_list, wh, net, scale_factor, minimum_wh, devic
 
 
 # <><><> 사용할 net architecture 선택하기.
-import sRGB.common_net.GRDN as net
+import sRGB.common_net.MPRNet as MPRNet
 
 
 class NetForInference(object):
@@ -164,7 +164,7 @@ class NetForInference(object):
         self.device = device
 
         # 사용할 딥러닝 모델들을 불러온다.
-        net_dict = {'G': net.GRDN(input_channel=input_channel)}
+        net_dict = {'G': MPRNet.MPRNet(in_c=input_channel)}
 
         # 불러온 모델의 사이즈를 출력해본다.
         print(f'\n===> Model size')

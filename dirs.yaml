@@ -1,4 +1,7 @@
 
+######################################################################################
+# training DB
+######################################################################################
 
 rawRGB:
   DB_dir: '/home/lab/works/datasets/ssd2/human_and_forest/DB_in_DataSet'
@@ -7,10 +10,46 @@ sRGB:
   DB_dir: '/home/lab/works/datasets/ssd2/human_and_forest/R_F_D_S_C'
 
 
-
+######################################################################################
+# pretrained Net
+######################################################################################
 pretrain_net_dir_for_align:
   R : './train-out/rain001/checkpoint_005000.pth'
   F : './train-out/fog001/checkpoint_005000.pth'
   D : './train-out/dust001/checkpoint_005000.pth'
   S : './train-out/snow002/checkpoint_005000.pth'
   L : './train-out/lowl001/checkpoint_005000.pth'
+
+pretrain_net_dir_for_test:
+  R: './train-out/de_rain001/checkpoint_last.pth'
+  F: './train-out/de_rain001/checkpoint_last.pth'
+  D: './train-out/de_rain001/checkpoint_last.pth'
+  S: './train-out/de_rain001/checkpoint_last.pth'
+  L: './train-out/de_rain001/checkpoint_last.pth'
+  L_raw :
+
+
+######################################################################################
+# test DB
+######################################################################################
+test_DB_folder_dir:
+  R: 'DB_samples/R'
+  F: 'DB_samples/F'
+  D: 'DB_samples/D'
+  S: 'DB_samples/S'
+  L: 'DB_samples/L'
+  L_raw :
+
+test_DB_dirs:
+  R:
+    - # 'hello.png'
+  F:
+    -
+  D:
+
+  S:
+    -
+  L:
+    -
+  L_raw:
+    -
