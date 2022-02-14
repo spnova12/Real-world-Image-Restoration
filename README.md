@@ -66,12 +66,25 @@ This project deals with the following noise images through deep learning.
    ```shell
    docker pull spnova12/img_restoration:latest
    ```
-- example
+- example1 (If you don't have this project yet)
    ```
-  docker run -it --rm --gpus all --ipc=host -v /nvme2-2/human_and_forest/database/:/works/database -v /nvme2-2/human_and_forest/project:/works/project spnova12/img_restoration:latest
+  # Change dir to yours.
+  docker run -it --rm --gpus all --ipc=host \
+                    -v /nvme2-2/human_and_forest/database/:/works/database \ 
+                    -v /nvme2-2/human_and_forest/project:/works/project \
+                    spnova12/img_restoration:latest
   cd /works/project/
   git clone https://github.com/spnova12/Real-world-Image-Restoration.git 
   cd Real-world-Image-Restoration/
+  ```
+- example2 (If you already have this project)
+   ```
+  # Change dir to yours.
+  docker run -it --rm --gpus all --ipc=host \
+                    -v /home/lab/works/datasets/ssd2/human_and_forest/:/works/database \
+                    -v /home/lab/works/projects/human_and_forest/:/works/project \
+                    spnova12/img_restoration:latest
+  cd /works/project/Real_world_Image_Restoration
   ```
 
   

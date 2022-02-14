@@ -363,11 +363,12 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False, save_repr
 
                         noisy_samples = total_dict[my_key][my_key2][h_level]
 
-                        # copy samples
-                        db_samples = make_dirs(f'DB_samples/{my_key2}')
-                        for n_sample in noisy_samples[:3]:
-                            n_sample_bname = os.path.basename(n_sample)
-                            copyfile(f'{n_sample}', f'{db_samples}/{n_sample_bname}')
+                        if 'D-211010_O1024S04_001_0001' in noisy_samples[0]:
+                            # copy samples
+                            db_samples = make_dirs(f'DB_samples_D-211010_O1024S04/{my_key2}')
+                            for n_sample in noisy_samples:
+                                n_sample_bname = os.path.basename(n_sample)
+                                copyfile(f'{n_sample}', f'{db_samples}/{n_sample_bname}')
 
 
     ############################################################################################################

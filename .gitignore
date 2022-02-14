@@ -24,8 +24,8 @@
 *.json
 train-out
 test-out
-DB_samples
+test-out/DB_samples
 
-
+*.avi
 
 

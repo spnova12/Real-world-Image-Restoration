@@ -19,6 +19,8 @@ with open('dirs.yaml') as f:
 
 if args.mode == 'sRGB':
     sRGB_get_data_info.get_data_info(dirs['sRGB']['DB_dir'])
+elif args.mode == 'sRGB_sampling':
+    sRGB_get_data_info.get_data_info2(dirs['sRGB']['DB_dir'])
 
 elif args.mode == 'rawRGB':
     rawRGB_get_data_info.get_data_info(dirs['rawRGB']['DB_dir'])
