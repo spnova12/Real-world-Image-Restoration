@@ -9,11 +9,13 @@ import sRGB.test as sRGB_test
 
 
 parser = argparse.ArgumentParser(description='Test')
-parser.add_argument('-my_db', action='store_true')
 parser.add_argument('-mode', default='None', type=str)
+parser.add_argument('-my_db', action='store_true')
 parser.add_argument('-cuda_num', default=None, type=str)
 parser.add_argument('-noise_type', default='R', type=str)
-parser.add_argument('-out_dir_name', default='my_out', type=str)
+
+parser.add_argument('-input_folder_dir', default='my_out', type=str)
+parser.add_argument('-out_folder_name', default='my_out', type=str)
 
 args = parser.parse_args()
 
@@ -31,29 +33,9 @@ if args.mode == 'sRGB':
 
     # option 2. Inference some samples and save (No require GT)
     else:
-        cuda_num = args.cuda_num
-
         # Get the checkpoint weight.
         pretrain_net_dir_for_test = dirs['pretrain_net_dir_for_test'][f'{args.noise_type}']
-
-        # Get the sample dirs for inference.
-        # from folders.
-        test_DB_folder_dir = dirs['test_DB_folder_dir'][f'{args.noise_type}']
-        # from individually.
-        test_DB_dirs = dirs['test_DB_dirs'][f'{args.noise_type}']
-        test_DB_dirs = [x for x in test_DB_dirs if x is not None]
-
-        test_DB_dir_list = None
-        if test_DB_folder_dir:
-            test_DB_dir_list = [os.path.join(test_DB_folder_dir, x) for x in sorted(os.listdir(test_DB_folder_dir))]
-        else:
-            print('Check yaml. The dir is empty.')
-            quit()
-
-        # final test sample list.
-        test_DB_dir_list += test_DB_dirs
-
-        sRGB_test.test_my_db(pretrain_net_dir_for_test, test_DB_dir_list, args.out_dir_name, cuda_num)
+        sRGB_test.test_my_db(pretrain_net_dir_for_test, args.input_folder_dir, args.out_folder_name, args.cuda_num)
 
 
 

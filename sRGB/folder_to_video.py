@@ -3,6 +3,7 @@ import numpy as np
 import glob
 import tqdm
 import copy
+import os
 
 
 def color_median(img_dirs):
@@ -26,9 +27,8 @@ def color_median(img_dirs):
 
 def folder_to_video(folder_dir, folder_recon_dir, videoname='MyVedio.avi'):
 
-    # set image format.
-    folder_dir += '/*.jpg'
-    folder_recon_dir += '/*.png'
+    img_dirs = [os.path.join(folder_dir, x) for x in sorted(os.listdir(folder_dir))]
+    img_recon_dirs = [os.path.join(folder_recon_dir, x) for x in sorted(os.listdir(folder_recon_dir))]
 
     # Set margin
     margin = 2
@@ -36,7 +36,6 @@ def folder_to_video(folder_dir, folder_recon_dir, videoname='MyVedio.avi'):
 
     # Get img array
     img_array = []
-    img_dirs = sorted(glob.glob(folder_dir))
 
     for filename in img_dirs[margin:-margin]:
         img = cv2.imread(filename)
@@ -44,7 +43,6 @@ def folder_to_video(folder_dir, folder_recon_dir, videoname='MyVedio.avi'):
 
     # Get img_recon array
     img_recon_array = []
-    img_recon_dirs = sorted(glob.glob(folder_recon_dir))
 
     for i in tqdm.tqdm(range(margin, len(img_recon_dirs)-margin)):
         median_img = color_median(img_recon_dirs[i-margin:i+margin])
@@ -77,7 +75,7 @@ def folder_to_video(folder_dir, folder_recon_dir, videoname='MyVedio.avi'):
 
 
     # Write video
-    out = cv2.VideoWriter(f'{videoname}', cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
+    out = cv2.VideoWriter(f'test-out/{videoname}', cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
 
     img_array_result = img_array_result[17:]
 
@@ -87,23 +85,20 @@ def folder_to_video(folder_dir, folder_recon_dir, videoname='MyVedio.avi'):
 
 
 def folder_to_video_sliding(folder_dir, folder_recon_dir, videoname='MyVedio_sliding.avi'):
-    # set image format.
-    folder_dir += '/*.jpg'
-    folder_recon_dir += '/*.png'
+    img_dirs = [os.path.join(folder_dir, x) for x in sorted(os.listdir(folder_dir))]
+    img_recon_dirs = [os.path.join(folder_recon_dir, x) for x in sorted(os.listdir(folder_recon_dir))]
 
     # Set margin. (For video use frame information. So use median)
     margin = 2
 
     # Get img array.
     img_array = []
-    img_dirs = sorted(glob.glob(folder_dir))
     for filename in img_dirs[margin:-margin]:
         img = cv2.imread(filename)
         img_array.append(img)
 
     # Get img_recon array.
     img_recon_array = []
-    img_recon_dirs = sorted(glob.glob(folder_recon_dir))
     for i in tqdm.tqdm(range(margin, len(img_recon_dirs) - margin)):
         median_img = color_median(img_recon_dirs[i - margin:i + margin])
         img_recon_array.append(median_img)
@@ -146,7 +141,7 @@ def folder_to_video_sliding(folder_dir, folder_recon_dir, videoname='MyVedio_sli
     print('result len', len(img_array_result))
 
     # Write video
-    out = cv2.VideoWriter(f'{videoname}', cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
+    out = cv2.VideoWriter(f'test-out/{videoname}', cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
 
     for i in range(len(img_array_result)):
         out.write(img_array_result[i])

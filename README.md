@@ -60,7 +60,7 @@ This project deals with the following noise images through deep learning.
     pip install py3exiv2
     ```   
   
-## Installation inside specific environments - docker  
+## Installation inside specific environments - docker (recommended) 
 
 - doker image
    ```shell
@@ -157,6 +157,27 @@ This project deals with the following noise images through deep learning.
 7. Test.  
    ```shell
    python test.py -mode sRGB -my_db -noise_type R -out_dir_name my_R -cuda_num 0
+   
+   ```
+8. Data test (Option)   
+   Let's take a sample of the data set and observe it.
+   ```shell
+   # Get sample images.
+   python get_data_info.py -mode sRGB_sampling
+   
+   # Get sample images with name.
+   python get_data_info.py -mode sRGB_sampling -img_name_to_find D-211010_O1024S04_001_0001
+  
+   # Infer foler.
+   python test.py -mode sRGB -my_db -noise_type S -cuda_num 0 \
+                   -input_folder_dir test-out/DB_high_level_samples_D-211010_O1024S04_001_0001 \
+                   -out_folder_name DB_high_level_samples_D-211010_O1024S04_001_0001_recon
+   
+   # Make video.
+   python get_data_info.py -mode sRGB_sample_to_video \
+                           -input_folder_dir test-out/DB_high_level_samples_D-211010_O1024S04_001_0001 \
+                           -out_folder_dir test-out/DB_high_level_samples_D-211010_O1024S04_001_0001_recon \
+                           -video_name desnowing.avi
    ```
    
 

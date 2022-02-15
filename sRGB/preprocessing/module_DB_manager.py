@@ -122,7 +122,7 @@ def is_dir_in_list(dir, list, valid_path_start_idx):
         return False
 
 
-def get_human_forrest_db(DB_dir, show_details=False, check_json=False, save_representative=False):
+def get_human_forrest_db(DB_dir, show_details=False, check_json=False):
     ############################################################################################################
     # Figure out Each version, read meta infos (error txt), init
     ############################################################################################################
@@ -342,33 +342,6 @@ def get_human_forrest_db(DB_dir, show_details=False, check_json=False, save_repr
     dict_counter = get_count_for_each_noise(total_dict)
     for my_dict_key2 in dict_counter.keys():
         print(f':: {my_dict_key2} : {len(dict_counter[my_dict_key2])}')
-
-    ############################################################################################################
-    # Option. Save representative sample.
-    ############################################################################################################
-
-    print('\n:: Save representative sample')
-    # copyfile(src, dst)
-    if save_representative:
-        for my_key in tqdm.tqdm(total_dict.keys()):
-            for my_key2 in total_dict[my_key].keys():
-                if total_dict[my_key][my_key2]:
-
-                    levels = list(total_dict[my_key][my_key2].keys())
-                    levels.remove('GT')
-
-                    levels = [level for level in levels if len(total_dict[my_key][my_key2][level]) > 10]
-                    if levels:
-                        h_level = sorted(levels)[-1]
-
-                        noisy_samples = total_dict[my_key][my_key2][h_level]
-
-                        if 'D-211010_O1024S04_001_0001' in noisy_samples[0]:
-                            # copy samples
-                            db_samples = make_dirs(f'DB_samples_D-211010_O1024S04/{my_key2}')
-                            for n_sample in noisy_samples:
-                                n_sample_bname = os.path.basename(n_sample)
-                                copyfile(f'{n_sample}', f'{db_samples}/{n_sample_bname}')
 
 
     ############################################################################################################

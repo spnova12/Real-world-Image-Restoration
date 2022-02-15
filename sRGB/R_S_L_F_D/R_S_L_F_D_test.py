@@ -6,8 +6,11 @@ from sRGB.common.module_utils import make_dirs
 import cv2
 import tqdm
 
-def main(pretrain_net_dir_for_test, test_DB_dir_list, out_dir_name, cuda_num):
-    out_dir = make_dirs(f'test-out/{out_dir_name}', )
+def main(pretrain_net_dir_for_test, input_folder_dir, out_folder_name, cuda_num):
+
+    test_DB_dir_list = [os.path.join(input_folder_dir, x) for x in sorted(os.listdir(input_folder_dir))]
+
+    out_dir = make_dirs(f'test-out/{out_folder_name}', )
 
     if cuda_num:
         device = torch.device(f'cuda:{cuda_num}')
@@ -29,7 +32,7 @@ def main(pretrain_net_dir_for_test, test_DB_dir_list, out_dir_name, cuda_num):
             (w, h), scale_factor=1, net=myNet.netG, minimum_wh=2000, device=device)
 
         # Get basename and save reconstructed image.
-        b_name = os.path.basename(test_DB_dir)
+        b_name = os.path.splitext(os.path.basename(test_DB_dir))[0]
         cv2.imwrite(f'{out_dir}/{b_name}_recon.png', recon_img)
 
 

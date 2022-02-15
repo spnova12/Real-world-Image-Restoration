@@ -32,24 +32,24 @@ pretrain_net_dir_for_test:
 ######################################################################################
 # test DB
 ######################################################################################
-test_DB_folder_dir:
-  R: 'DB_samples_210802_O1013R04/R'
-  F: 'DB_samples/F'
-  D: 'DB_samples/D'
-  S: 'DB_samples_D-211010_O1024S04/S'
-  L: 'DB_samples/L'
-  L_raw :
-
-test_DB_dirs:
-  R:
-    - # 'hello.png'
-  F:
-    -
-  D:
-
-  S:
-    -
-  L:
-    -
-  L_raw:
-    -
+#test_DB_folder_dir:
+#  R: 'DB_samples_210802_O1013R04/R'
+#  F: 'DB_samples/F'
+#  D: 'DB_samples/D'
+#  S: 'DB_samples_D-211010_O1024S04/S'
+#  L: 'DB_samples/L'
+#  L_raw :
+#
+#test_DB_dirs:
+#  R:
+#    - # 'hello.png'
+#  F:
+#    -
+#  D:
+#
+#  S:
+#    -
+#  L:
+#    -
+#  L_raw:
+#    -
