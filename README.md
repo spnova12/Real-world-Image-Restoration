@@ -70,7 +70,7 @@ This project deals with the following noise images through deep learning.
    ```
   # Change dir to yours.
   docker run -it --rm --gpus all --ipc=host \
-                    -v /nvme2-2/human_and_forest/database/:/works/database \ 
+                    -v /nvme2-2/human_and_forest/database/:/works/database \
                     -v /nvme2-2/human_and_forest/project:/works/project \
                     spnova12/img_restoration:latest
   cd /works/project/
