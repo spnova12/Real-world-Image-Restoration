@@ -139,14 +139,18 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
 
             input_img = None
             target_img_new_aligned = None
-            b_name = None
+            do_infer = False
+
             if median:
                 b_name = os.path.splitext(os.path.basename(input[3]))[0]
-                if b_name in test_DB_list:
+                if test_DB_list is None:
+                    do_infer = True
+                elif b_name in test_DB_list:
+                    do_infer = True
+                if do_infer:
                     input_img, my_median_img, target_img_new = train_set.make_noisy_and_new_gt(input, target,
                                                                                                median=median,
                                                                                                return_noise_and_median=True)
-
 
                     # (2-0) Make aligned image through netA
                     h, w, _ = input_img.shape
@@ -156,7 +160,11 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
 
             else:
                 b_name = os.path.splitext(os.path.basename(input))[0]
-                if b_name in test_DB_list:
+                if test_DB_list is None:
+                    do_infer = True
+                elif b_name in test_DB_list:
+                    do_infer = True
+                if do_infer:
                     input_img, target_img_new = train_set.make_noisy_and_new_gt(input, target)
 
 
