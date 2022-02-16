@@ -32,13 +32,15 @@ class DatasetForDataLoader(data.Dataset):
         :param img_dirs: [(input, target), (input, target) ... (input, target)]
         """
         self.hf_DB = HumanForrestManager(hf_DB_dir, noise_type, show_details=False)
-        self.ipsize = additional_info['input_patch_size']
-        self.median = median
 
-        # torchvision 에 있는 함수들은 될수있으면 그대로 가져다 사용하자.
-        self.random_crop = transforms.RandomCrop(self.ipsize)
+        self.ipsize = None
+        if additional_info is not None:
+            self.ipsize = additional_info['input_patch_size']
+
         # self.resize = transforms.Resize(self.tpsize//self.sfactor, Image.BICUBIC)
         self.totensor = transforms.ToTensor()  # [0,255] -> [0,1] 로 만들어줌.
+
+        self.median = median
 
         self.db_len = self.hf_DB.get_db_len()
 

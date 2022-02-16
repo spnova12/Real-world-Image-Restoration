@@ -27,15 +27,22 @@ with open('dirs.yaml') as f:
 # python test.py -mode sRGB -noise_type R -out_dir_name my_R -my_db -cuda_num 0
 
 if args.mode == 'sRGB':
+
     # option 1. Get final test result (get psnr and save some samples)
     if not args.my_db:
-        pass
+        sRGB_test.test(
+            dirs['pretrain_net_dir_for_test'][args.noise_type],
+            dirs['pretrain_net_dir_for_align'][args.noise_type],
+            dirs['sRGB']['DB_dir'],
+            args.noise_type,
+            args.cuda_num
+        )
 
     # option 2. Inference some samples and save (No require GT)
     else:
-        # Get the checkpoint weight.
-        pretrain_net_dir_for_test = dirs['pretrain_net_dir_for_test'][f'{args.noise_type}']
-        sRGB_test.test_my_db(pretrain_net_dir_for_test, args.input_folder_dir, args.out_folder_name, args.cuda_num)
+        sRGB_test.test_my_db(
+            dirs['pretrain_net_dir_for_test'][args.noise_type],
+            args.input_folder_dir, args.out_folder_name, args.cuda_num)
 
 
 

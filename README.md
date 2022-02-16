@@ -154,11 +154,24 @@ This project deals with the following noise images through deep learning.
    # dust  
    python train.py -mode sRGB -exp_name de_dust001 -noise_type D -cuda_num 0
    ```
-7. Test.  
+7. Test. (Get the final test psnr)  
    ```shell
-   python test.py -mode sRGB -my_db -noise_type R -out_dir_name my_R -cuda_num 0
+   # rain
+   python test.py -mode sRGB -noise_type R -cuda_num 0
    
-   ```
+   # fog
+   python test.py -mode sRGB -noise_type F -cuda_num 0
+   
+   # snow
+   python test.py -mode sRGB -noise_type S -cuda_num 0
+   
+   # lowlight
+   python test.py -mode sRGB -noise_type L -cuda_num 0
+   
+   # dust
+   python test.py -mode sRGB -noise_type D -cuda_num 0
+   ```  
+    
 8. Data test (Option)   
    Let's take a sample of the data set and observe it.
    ```shell
