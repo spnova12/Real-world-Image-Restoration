@@ -197,6 +197,7 @@ class NetForInference(object):
             self.netG.load_state_dict(checkpoint['G'])
         else:
             print(": no checkpoint found at '{}'".format(load_checkpoint_dir))
+            exit()
 
 
 
