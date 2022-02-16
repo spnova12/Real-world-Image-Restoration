@@ -208,6 +208,7 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
 
     write_text(test_DB_list_txt_dir, keys, -1)
 
+    make_dirs('test-out')
     csv_dir = f'test-out/test_DB_{noise_type}_psnrs.csv'
     print(f':: For detailed psnr values for each test image, refer to the following file: {csv_dir}')
     with open(csv_dir, "w") as output:
