@@ -57,8 +57,10 @@ elif args.mode == 'rawRGB':
 
     # option 2.
     else:
-        rawRGB_test.test_my_db()
+        rawRGB_test.test_my_db(
+            dirs['pretrain_net_dir_for_test']['L_raw'],
+            args.input_folder_dir, args.out_folder_name, args.cuda_num)
 
-
+##################################################################################################################
 else:
     sys.exit('mode is not correct')

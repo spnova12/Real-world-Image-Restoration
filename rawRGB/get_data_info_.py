@@ -66,17 +66,21 @@ def get_data_info_and_samples(DB_dir):
         bname = os.path.splitext(bname)[0]
 
         out_sample_dir = f'{out_dir}/{bname}_input_sRGB_uint8.png'
-        # print_wrap(f'Write input sample. ({input_sample_dir})')
+
+        cfa_mask_dir = f"{os.path.splitext(sample1['input'])[0]}_cfa_mask.bz2"
 
         input_cfa_data_patch = read_obj(sample1['input'])
         input_metadata_dict = read_obj(sample1['input_metadata_dict'])
-        input_cfa_mask = read_obj(f"{os.path.splitext(sample1['input'])[0]}_cfa_mask.bz2")
+        input_cfa_mask = read_obj(cfa_mask_dir)
         input_srgb_uint8 = raw_16bit_postprocess(input_cfa_data_patch, input_metadata_dict, input_cfa_mask)
         cv2.imwrite(out_sample_dir, input_srgb_uint8)
+        shutil.copy(sample1['input'], f'{out_dir}/{bname}.bz2')
         shutil.copy(sample1['input'], f'{out_dir}/{bname}.bz2')
 
         bname_metadata = os.path.basename(sample1['input_metadata_dict'])
         shutil.copy(sample1['input_metadata_dict'], f'{out_dir}/{bname_metadata}')
+        bname_cfa_mask = os.path.basename(cfa_mask_dir)
+        shutil.copy(cfa_mask_dir, f'{out_dir}/{bname_cfa_mask}')
 
 
         # target

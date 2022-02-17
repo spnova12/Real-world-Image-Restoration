@@ -233,7 +233,9 @@ Demo video links
    python get_data_info.py -mode rawRGB_sampling
    
    # Infer folder.
-   python test.py -mode 
+   python test.py -mode rawRGB -my_db -cuda_num 0 \
+                  -input_folder_dir test-out/DB_raw_samples \
+                  -out_folder_name test-out/DB_raw_samples
    ```
 
 ## Referenced codes

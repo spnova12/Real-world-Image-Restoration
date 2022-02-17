@@ -60,8 +60,46 @@ def get_now_timestamp():
 
 
 
-def main():
-    pass
+def main(pretrain_net_dir_for_test, input_folder_dir, out_folder_name, cuda_num):
+    # Set model
+    my_model = MPRNet.MPRNet(in_c=4, out_c=4)
+    myNet = eval_tools.NetForInference(my_model, cuda_num=cuda_num)
+    myNet.weight_loader(pretrain_net_dir_for_test)
+
+    # Set Device.
+    device = torch.device(f'cuda:{cuda_num}')
+
+    # Get Dataset
+    print_wrap('Read all the patches.(.bz2)')
+    # read only image not metadata.
+    raw_dir_list = [x for x in glob.glob(f"{input_folder_dir}/*.bz2")
+                    if 'metadata_dict' not in x and 'cfa_mask' not in x]
+
+    for raw_dir in tqdm.tqdm(raw_dir_list):
+        # get pair dir.
+        input = read_obj(raw_dir)
+        input_metadata_dict = read_obj(raw_dir.split('___')[0] + '___metadata_dict.bz2')
+        input_cfa_mask = read_obj(f"{os.path.splitext(raw_dir)[0]}_cfa_mask.bz2")
+
+        input_img = raw_16bit_to_normalized_raw(input, input_metadata_dict, input_cfa_mask)
+
+        # get base name to use.
+        b_name = os.path.splitext(os.path.basename(raw_dir))[0]
+
+        # get the result
+        h, w, _ = input_img.shape
+        recon_img = eval_tools.recon_big_one_frame(
+            input_img,
+            (w, h), scale_factor=1, net=myNet.netG, minimum_wh=1000, device=device)
+
+
+        # visualize recon_img
+        recon_img_uint8 = normalized_dng_postprocess_for_patch(normalized_raw=recon_img,
+                                                               metadata_dict=input_metadata_dict)
+        # Make new dir for save eval from input dir.
+        new_dir = utils.make_dirs(f'{out_folder_name}')
+        cv2.imwrite(f'{new_dir}/{b_name}_reconstructed.png', recon_img_uint8)
+
 
 def main2(pretrain_net_dir_for_test, hf_patches_folder_dir, json_folder_dir, cuda_num):
 
@@ -145,15 +183,6 @@ def main2(pretrain_net_dir_for_test, hf_patches_folder_dir, json_folder_dir, cud
         # get psnr
         psnr_dict[f'{str(b_name)}'] = utils.get_psnr(recon_img, target_img_new, min_value=0, max_value=1)
 
-        # visualize_eval_raw = False
-        # if visualize_eval_raw:
-        #     # visualize recon_img
-        #     recon_img_uint8 = normalized_dng_postprocess_for_patch(normalized_raw=recon_img,
-        #                                                            metadata_dict=read_obj(input_metadata_dict))
-        #     # Make new dir for save eval from input dir.
-        #     new_dir = utils.make_dirs(f'{save_dir}/{b_name}')
-        #     cv2.imwrite(f'{new_dir}/{b_name}_transferred_{str(iter).zfill(10)}.png', recon_img_uint8)
-        #
 
     ################################################################################################
 

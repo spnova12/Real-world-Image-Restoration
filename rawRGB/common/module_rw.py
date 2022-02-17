@@ -44,4 +44,4 @@ def read_obj(filename):
             with lzma.open(f'{filename}', 'rb') as f:
                 return pickle.load(f)
     else:
-        sys.exit('No file')
+        sys.exit(f'No file({filename})')
