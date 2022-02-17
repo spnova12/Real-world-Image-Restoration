@@ -189,7 +189,7 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
     ################################################################################################
 
     if test_DB_list is None:
-        f = 50
+        f = 90
         test_size = int(len(psnr_dict) * (f / 100))
 
         samples = random.sample(list(psnr_dict.keys()), test_size)
