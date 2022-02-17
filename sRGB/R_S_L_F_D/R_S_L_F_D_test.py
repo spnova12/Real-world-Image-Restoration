@@ -188,19 +188,17 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
 
     ################################################################################################
 
+    Test_rate = 10
     if test_DB_list is None:
-        f = 90
+
+        psnrs = sorted(psnr_dict.items(), key=lambda x: x[1], reverse=True)
+
+        f = 20  # Actual valid rate
         test_size = int(len(psnr_dict) * (f / 100))
-
-        samples = random.sample(list(psnr_dict.keys()), test_size)
-        psnr_dict_new = {}
-        for sample in samples:
-            psnr_dict_new[sample] = psnr_dict[sample]
-
-        # sort
-        psnrs = sorted(psnr_dict_new.items(), key=lambda x: x[1], reverse=True)
-        test_size = int(len(psnr_dict_new) * (10/f))
         psnrs = psnrs[:test_size]
+
+        test_size = int(len(psnrs) * (Test_rate/100))
+        psnrs = random.sample(psnrs, test_size)
     else:
         psnrs = sorted(psnr_dict.items(), key=lambda x: x[1], reverse=True)
 
@@ -211,9 +209,8 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
 
     result_average = sum(v)/len(v)
 
-    print(f':: testDB/totalDB: {len(psnrs)}/{total_pair_size}')
+    print(f':: Test rate : {Test_rate}%')
     print(f':: Average PSNR : {result_average}')
-
 
     write_text(test_DB_list_txt_dir, keys, -1)
 
