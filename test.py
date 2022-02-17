@@ -45,13 +45,9 @@ if args.mode == 'sRGB':
             args.input_folder_dir, args.out_folder_name, args.cuda_num)
 
 
+##################################################################################################################
+elif args.mode == 'rawRGB':
+    rawRGB_train.train(args.exp_name, dirs['rawRGB']['DB_dir'], args.cuda_num)
 
-
-#
-#
-# ##################################################################################################################
-# elif args.mode == 'rawRGB':
-#     rawRGB_train.train(args.exp_name, dirs['rawRGB']['DB_dir'], args.cuda_num)
-#
-# else:
-#     sys.exit('mode is not correct')
+else:
+    sys.exit('mode is not correct')

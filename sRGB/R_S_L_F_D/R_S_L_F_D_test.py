@@ -119,7 +119,8 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
 
     ################################################################################################
     print('\n:: timestamp:', get_now_timestamp())
-    print(':: (Among all data, items that are not in the test set are skipped.)', noise_type)
+    print(f':: noise_type: {noise_type}')
+    print(':: (Among all data, items that are not in the test set are skipped.)')
 
     psnr_dict = {}
     total_pair_size = 0
