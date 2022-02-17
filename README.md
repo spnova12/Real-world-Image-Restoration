@@ -10,7 +10,7 @@ This project deals with the following noise images through deep learning.
 - sRGB: low light(outdoor), rain, fog, dust, snow.
 - raw-RGB: low light(indoor)  
 
-Demo video link  
+Demo video links  
 - [Desnowing](https://youtu.be/9VkovGhjZ94)
 - [Deraining](https://youtu.be/99O-3GPbexM)  
  
