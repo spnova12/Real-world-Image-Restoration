@@ -189,7 +189,8 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
     ################################################################################################
 
     if test_DB_list is None:
-        test_size = int(len(psnr_dict) * (13 / 100))
+        f = 50
+        test_size = int(len(psnr_dict) * (f / 100))
 
         samples = random.sample(list(psnr_dict.keys()), test_size)
         psnr_dict_new = {}
@@ -198,7 +199,7 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
 
         # sort
         psnrs = sorted(psnr_dict_new.items(), key=lambda x: x[1], reverse=True)
-        test_size = int(len(psnr_dict_new) * (10/13))
+        test_size = int(len(psnr_dict_new) * (10/f))
         psnrs = psnrs[:test_size]
     else:
         psnrs = sorted(psnr_dict.items(), key=lambda x: x[1], reverse=True)
@@ -211,7 +212,7 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
     result_average = sum(v)/len(v)
 
     print(f':: testDB/totalDB: {len(psnrs)}/{total_pair_size}')
-    print(f':: Average PSNR : {result_average:.2}')
+    print(f':: Average PSNR : {result_average}')
 
 
     write_text(test_DB_list_txt_dir, keys, -1)
