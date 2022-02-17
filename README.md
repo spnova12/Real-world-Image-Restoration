@@ -8,11 +8,15 @@ and affected by various noises with deep learning.
 
 This project deals with the following noise images through deep learning.
 - sRGB: low light(outdoor), rain, fog, dust, snow.
-- raw-RGB: low light(indoor)
+- raw-RGB: low light(indoor)  
+
+Demo video link  
+- [Desnowing](https://youtu.be/9VkovGhjZ94)
+- [Deraining](https://youtu.be/99O-3GPbexM)  
  
 
-## Datasets
-- Dataset link :   
+## Dataset
+- [Dataset]()   
 - Dataset structure  
 `Training Dataset`  
   `├──rain`  
@@ -221,7 +225,11 @@ This project deals with the following noise images through deep learning.
     ```
 7. Test.  
 
-## Results
+## Referenced codes
+- [MPRNet](https://github.com/swz30/MPRNet) 
+- [DeepSelfie](https://github.com/YCL92/deepSelfie) 
+- [NTIRE 2021 Challenge on Burst Super-Resolution](https://github.com/goutamgmb/deep-burst-sr) 
+- [GRDN](https://github.com/BusterChung/NTIRE_test_code) 
 
 ## Contact 
 Should you have any question, please contact spnova12@gmail.com
