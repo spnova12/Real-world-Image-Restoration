@@ -36,6 +36,8 @@ elif args.mode == 'sRGB_sample_to_video':
 
 elif args.mode == 'rawRGB':
     rawRGB_get_data_info.get_data_info(dirs['rawRGB']['DB_dir'])
+elif args.mode == 'rawRGB_sampling':
+    rawRGB_get_data_info.get_data_info_and_samples(dirs['rawRGB']['DB_dir'])
 
 else:
     sys.exit('mode is not correct')
