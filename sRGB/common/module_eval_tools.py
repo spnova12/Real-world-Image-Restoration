@@ -191,7 +191,7 @@ class NetForInference(object):
         print(f"\n===> Load checkpoint")
         if os.path.isfile(load_checkpoint_dir):
             print(": loading checkpoint '{}'".format(load_checkpoint_dir))
-            checkpoint = torch.load(load_checkpoint_dir)
+            checkpoint = torch.load(load_checkpoint_dir, map_location=self.device)
             iter_count = checkpoint['iter_count']
             best_psnr = checkpoint['best_psnr']
             self.netG.load_state_dict(checkpoint['G'])

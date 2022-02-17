@@ -104,17 +104,23 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
 
         # for loop for 4 levels
         for l in range(6):
-            # fix the noise number(index) as 0
             v = train_set.get_input_target_pairs(index=idx, noise_level=l + 1, noisy_num=0,
                                                  median=median)
             if v:
                 my_scene.append(v)
+
+            v2 = train_set.get_input_target_pairs(index=idx, noise_level=l + 1, noisy_num=2,
+                                                 median=median)
+            if v2:
+                my_scene.append(v2)
+
         eval_set.append(my_scene)
 
 
     ################################################################################################
     print('\n:: timestamp:', get_now_timestamp())
-    print(':: Test noise :', noise_type)
+    print(':: (Among all data, items that are not in the test set are skipped.)', noise_type)
+
     psnr_dict = {}
     total_pair_size = 0
 
@@ -193,7 +199,7 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
 
         psnrs = sorted(psnr_dict.items(), key=lambda x: x[1], reverse=True)
 
-        f = 20  # Actual valid rate
+        f = 70  # Actual valid rate
         test_size = int(len(psnr_dict) * (f / 100))
         psnrs = psnrs[:test_size]
 
