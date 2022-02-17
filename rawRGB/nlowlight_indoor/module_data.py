@@ -23,6 +23,48 @@ import torch.backends.cudnn as cudnn
 cudnn.benchmark = True
 
 
+def make_noisy_and_new_gt(input, target, json, input_metadata_dict, target_metadata_dict):
+    cfa_data_patch_position = os.path.splitext(input)[0].split('___')[1].split('_')
+    input_cfa_mask = read_obj(f"{os.path.splitext(input)[0]}_cfa_mask.bz2")
+    target_cfa_mask = read_obj(f"{os.path.splitext(target)[0]}_cfa_mask.bz2")
+
+    j, i, w, h = [int(x) for x in cfa_data_patch_position]
+
+    # noisy
+    my_noisy_img = raw_16bit_to_normalized_raw(read_obj(input), read_obj(input_metadata_dict), input_cfa_mask)
+    # target
+    my_gt_img = raw_16bit_to_normalized_raw(read_obj(target), read_obj(target_metadata_dict), target_cfa_mask)
+
+    # get only one chennel.
+    drawImg = get_screens(json)[:, :, 0]
+
+    # resize
+    drawImg = cv2.resize(drawImg, dsize=(5796, 3870),
+                         interpolation=cv2.INTER_LINEAR)
+    # crop
+    drawImg = drawImg[i: (i + h), j: (j + w)]
+
+    drawImg = cv2.resize(drawImg, dsize=(0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_LINEAR)
+
+    # blur to sky label mask
+    sd = 8
+    truncate = 2
+    radius = int(truncate * sd + 0.5)
+    drawImg = cv2.GaussianBlur(drawImg * 255, (radius * 2 + 1, radius * 2 + 1), sd)
+    drawImg = np.clip(drawImg, 0, 255)
+    drawImg = drawImg / 255
+
+    # map to 4channels
+    drawImg = np.repeat(drawImg.reshape(drawImg.shape[0], drawImg.shape[1], 1), 4, axis=2)
+
+    # Apply the map
+    clouds = my_noisy_img * drawImg
+    forground = my_gt_img * (1 - drawImg)
+    new_gt_img = clouds + forground
+
+    return my_noisy_img, my_gt_img, new_gt_img
+
+
 class DatasetForDataLoader(data.Dataset):
     """
     여러 데이터셋을 지정한 비율대로 섞어서 사용할 수 있다.
@@ -42,46 +84,8 @@ class DatasetForDataLoader(data.Dataset):
         return self.hf_DB
 
     def make_noisy_and_new_gt(self, input, target, json, input_metadata_dict, target_metadata_dict):
-
-        cfa_data_patch_position = os.path.splitext(input)[0].split('___')[1].split('_')
-        input_cfa_mask = read_obj(f"{os.path.splitext(input)[0]}_cfa_mask.bz2")
-        target_cfa_mask = read_obj(f"{os.path.splitext(target)[0]}_cfa_mask.bz2")
-
-
-        j, i, w, h = [int(x) for x in cfa_data_patch_position]
-
-        # noisy
-        my_noisy_img = raw_16bit_to_normalized_raw(read_obj(input), read_obj(input_metadata_dict), input_cfa_mask)
-        # target
-        my_gt_img = raw_16bit_to_normalized_raw(read_obj(target), read_obj(target_metadata_dict), target_cfa_mask)
-
-        # get only one chennel.
-        drawImg = get_screens(json)[:, :, 0]
-
-        # resize
-        drawImg = cv2.resize(drawImg, dsize=(5796, 3870),
-                             interpolation=cv2.INTER_LINEAR)
-        # crop
-        drawImg = drawImg[i: (i + h), j: (j + w)]
-
-        drawImg = cv2.resize(drawImg, dsize=(0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_LINEAR)
-
-        # blur to sky label mask
-        sd = 8
-        truncate = 2
-        radius = int(truncate * sd + 0.5)
-        drawImg = cv2.GaussianBlur(drawImg * 255, (radius * 2 + 1, radius * 2 + 1), sd)
-        drawImg = np.clip(drawImg, 0, 255)
-        drawImg = drawImg / 255
-
-        # map to 4channels
-        drawImg = np.repeat(drawImg.reshape(drawImg.shape[0], drawImg.shape[1], 1), 4, axis=2)
-
-        # Apply the map
-        clouds = my_noisy_img * drawImg
-        forground = my_gt_img * (1 - drawImg)
-        new_gt_img = clouds + forground
-
+        my_noisy_img, my_gt_img, new_gt_img = make_noisy_and_new_gt(input, target, json,
+                                                                    input_metadata_dict, target_metadata_dict)
         return my_noisy_img, my_gt_img, new_gt_img
 
 

@@ -6,7 +6,7 @@ import tqdm
 import rawRGB.common.module_utils as utils
 
 import torch
-import torchvision.transforms as transforms
+import torch.nn as nn
 
 
 
@@ -146,26 +146,33 @@ def recon_big_one_frame(input_big_list, wh, net, scale_factor, minimum_wh, devic
 ######################################################################################################################
 ######################################################################################################################
 
-
-# <><><> 사용할 net architecture 선택하기.
-import rawRGB.common_net.GRDN as net
-
-
 class NetForInference(object):
     """
     학습이 다 끝난 후 모델을 inference 할 때 쓰이는 class.
     """
-    def __init__(self, input_channel, device):
+    def __init__(self, my_model, cuda_num=None):
         # 사용할 gpu 번호.
-        self.device = device
+        if cuda_num == None:
+            cuda_num = 0
+            DataParallel = True
+        else:
+            DataParallel = False
+
+        self.device = torch.device(f'cuda:{cuda_num}')
 
         # 사용할 딥러닝 모델들을 불러온다.
-        net_dict = {'G': net.GRDN(input_channel=input_channel)}
+        net_dict = {'G': my_model}
 
         # 불러온 모델의 사이즈를 출력해본다.
         print(f'\n===> Model size')
         for key in net_dict.keys():
             print(f'Number of params ({key}): {sum([p.data.nelement() for p in net_dict[key].parameters()])}')
+
+        # Set DataParallel.
+        if torch.cuda.device_count() > 1 and DataParallel:
+            print("\n===> Let's use", torch.cuda.device_count(), "GPUs!")
+            # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
+            self.netG = nn.DataParallel(net_dict['G'])
 
         self.netG = net_dict['G'].to(self.device)
 
@@ -174,13 +181,12 @@ class NetForInference(object):
         print(f"\n===> Load checkpoint")
         if os.path.isfile(load_checkpoint_dir):
             print(": loading checkpoint '{}'".format(load_checkpoint_dir))
-            checkpoint = torch.load(load_checkpoint_dir)
+            checkpoint = torch.load(load_checkpoint_dir, map_location=self.device)
             iter_count = checkpoint['iter_count']
             best_psnr = checkpoint['best_psnr']
             self.netG.load_state_dict(checkpoint['G'])
         else:
             print(": no checkpoint found at '{}'".format(load_checkpoint_dir))
-
-
+            exit()
 
 

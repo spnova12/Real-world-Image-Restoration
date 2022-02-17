@@ -223,7 +223,12 @@ Demo video links
     # lowlight (indoor)
     python train.py -mode rawRGB -exp_name rawRGB001
     ```
-7. Test.  
+6. Test.
+   ```shell
+   python test.py -mode rawRGB -cuda_num 3
+   ```
+7Test sample.  
+
 
 ## Referenced codes
 - [MPRNet](https://github.com/swz30/MPRNet) 

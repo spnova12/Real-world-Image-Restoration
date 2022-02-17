@@ -47,7 +47,12 @@ if args.mode == 'sRGB':
 
 ##################################################################################################################
 elif args.mode == 'rawRGB':
-    rawRGB_train.train(args.exp_name, dirs['rawRGB']['DB_dir'], args.cuda_num)
+    # def test(pretrain_net_dir_for_test, DB_dir, cuda_num=None):
+    rawRGB_test.test(
+        dirs['pretrain_net_dir_for_test']['L_raw'],
+        dirs['rawRGB']['DB_dir'],
+        args.cuda_num
+    )
 
 else:
     sys.exit('mode is not correct')

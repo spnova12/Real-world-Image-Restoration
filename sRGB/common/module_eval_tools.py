@@ -6,7 +6,6 @@ import tqdm
 import sRGB.common.module_utils as utils
 
 import torch
-import torchvision.transforms as transforms
 import torch.nn as nn
 
 
@@ -150,11 +149,6 @@ def recon_big_one_frame(input_big_list, wh, net, scale_factor, minimum_wh, devic
 ######################################################################################################################
 ######################################################################################################################
 ######################################################################################################################
-
-
-# <><><> 사용할 net architecture 선택하기.
-import sRGB.common_net.MPRNet as MPRNet
-
 
 class NetForInference(object):
     """
