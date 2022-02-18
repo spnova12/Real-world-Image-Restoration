@@ -104,15 +104,12 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
 
         # for loop for 4 levels
         for l in range(6):
-            v = train_set.get_input_target_pairs(index=idx, noise_level=l + 1, noisy_num=0,
-                                                 median=median)
-            if v:
-                my_scene.append(v)
-
-            v2 = train_set.get_input_target_pairs(index=idx, noise_level=l + 1, noisy_num=2,
-                                                 median=median)
-            if v2:
-                my_scene.append(v2)
+            sample_l = 2
+            for noisy_num_i in range(sample_l):
+                v = train_set.get_input_target_pairs(index=idx, noise_level=l + 1, noisy_num=noisy_num_i,
+                                                     median=median)
+                if v:
+                    my_scene.append(v)
 
         eval_set.append(my_scene)
 
@@ -195,17 +192,19 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
 
     ################################################################################################
 
-    Test_rate = 100
+    Test_rate = 10
     if test_DB_list is None:
 
         psnrs = sorted(psnr_dict.items(), key=lambda x: x[1], reverse=True)
 
-        f = 100  # Actual valid rate
+        f = 25  # Actual valid rate
         test_size = int(len(psnr_dict) * (f / 100))
         psnrs = psnrs[:test_size]
 
         test_size = int(len(psnrs) * (Test_rate/100))
         psnrs = random.sample(psnrs, test_size)
+
+        print(f':: testset/total:{test_size}/{len(psnr_dict.items())}')
         psnrs = sorted(psnrs, key=lambda x: x[1], reverse=True)
     else:
         psnrs = sorted(psnr_dict.items(), key=lambda x: x[1], reverse=True)
