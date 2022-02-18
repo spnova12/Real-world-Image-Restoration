@@ -192,12 +192,12 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
 
     ################################################################################################
 
-    Test_rate = 10
+    Test_rate = 25
     if test_DB_list is None:
 
         psnrs = sorted(psnr_dict.items(), key=lambda x: x[1], reverse=True)
 
-        f = 25  # Actual valid rate
+        f = 10  # Actual valid rate
         test_size = int(len(psnr_dict) * (f / 100))
         psnrs = psnrs[:test_size]
 
