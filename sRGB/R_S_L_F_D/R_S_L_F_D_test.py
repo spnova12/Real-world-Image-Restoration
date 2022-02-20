@@ -197,15 +197,15 @@ def main2(pretrain_net_dir_for_test, pretrain_net_dir_for_align, DB_dir, noise_t
 
         psnrs = sorted(psnr_dict.items(), key=lambda x: x[1], reverse=True)
 
-        f = 10  # Actual valid rate
-        test_size = int(len(psnr_dict) * (f / 100))
-        psnrs = psnrs[:test_size]
-
-        test_size = int(len(psnrs) * (Test_rate/100))
-        psnrs = random.sample(psnrs, test_size)
-
-        print(f':: testset/total:{test_size}/{len(psnr_dict.items())}')
-        psnrs = sorted(psnrs, key=lambda x: x[1], reverse=True)
+        # f = 10  # Actual valid rate
+        # test_size = int(len(psnr_dict) * (f / 100))
+        # psnrs = psnrs[:test_size]
+        #
+        # test_size = int(len(psnrs) * (Test_rate/100))
+        # psnrs = random.sample(psnrs, test_size)
+        #
+        # print(f':: testset/total:{test_size}/{len(psnr_dict.items())}')
+        # psnrs = sorted(psnrs, key=lambda x: x[1], reverse=True)
     else:
         psnrs = sorted(psnr_dict.items(), key=lambda x: x[1], reverse=True)
 
