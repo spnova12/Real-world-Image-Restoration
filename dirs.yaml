@@ -14,42 +14,16 @@ sRGB:
 # pretrained Net
 ######################################################################################
 pretrain_net_dir_for_align:
-  R : './train-out/rain001/checkpoint_005000.pth'
-  F : './train-out/fog001/checkpoint_005000.pth'
-  D : './train-out/dust001/checkpoint_005000.pth'
-  S : './train-out/snow002/checkpoint_005000.pth'
-  L : './train-out/lowl001/checkpoint_005000.pth'
+  R : 'Pre-trained-weights/rain_align.pth'
+  F : 'Pre-trained-weights/fog_align.pth'
+  D : 'Pre-trained-weights/dust_align.pth'
+  S : 'Pre-trained-weights/snow_align.pth'
+  L : 'Pre-trained-weights/lowlight_align.pth'
 
 pretrain_net_dir_for_test:
-  R: './train-out/de_rain001/checkpoint_last.pth'
-  F: './train-out/de_fog001/checkpoint_last.pth'
-  D: './train-out/de_dust001/checkpoint_last.pth'
-  S: './train-out/de_snow001/checkpoint_last.pth'
-  L: './train-out/de_lowl001/checkpoint_last.pth'
-  L_raw : './train-out/rawRGB001/checkpoint_last.pth'
-
-
-######################################################################################
-# test DB
-######################################################################################
-#test_DB_folder_dir:
-#  R: 'DB_samples_210802_O1013R04/R'
-#  F: 'DB_samples/F'
-#  D: 'DB_samples/D'
-#  S: 'DB_samples_D-211010_O1024S04/S'
-#  L: 'DB_samples/L'
-#  L_raw :
-#
-#test_DB_dirs:
-#  R:
-#    - # 'hello.png'
-#  F:
-#    -
-#  D:
-#
-#  S:
-#    -
-#  L:
-#    -
-#  L_raw:
-#    -
+  R: 'Pre-trained-weights/rain.pth'
+  F: 'Pre-trained-weights/fog.pth'
+  D: 'Pre-trained-weights/dust.pth'
+  S: 'Pre-trained-weights/snow.pth'
+  L: 'Pre-trained-weights/lowlight.pth'
+  L_raw : 'Pre-trained-weights/lowlight_raw.pth'

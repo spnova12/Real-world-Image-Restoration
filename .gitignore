@@ -25,7 +25,8 @@
 train-out
 test-out
 test-out/DB_samples
-
+*.zip
+Pre-trained-weights
 *.avi
 
 
