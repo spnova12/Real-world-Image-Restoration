@@ -61,6 +61,9 @@ def get_now_timestamp():
 
 
 def main(pretrain_net_dir_for_test, input_folder_dir, out_folder_name, cuda_num):
+    if cuda_num == None:
+        cuda_num = 0
+
     # Set model
     my_model = MPRNet.MPRNet(in_c=4, out_c=4)
     myNet = eval_tools.NetForInference(my_model, cuda_num=cuda_num)
@@ -102,6 +105,9 @@ def main(pretrain_net_dir_for_test, input_folder_dir, out_folder_name, cuda_num)
 
 
 def main2(pretrain_net_dir_for_test, hf_patches_folder_dir, json_folder_dir, cuda_num):
+
+    if cuda_num == None:
+        cuda_num = 0
 
     # Set model
     my_model = MPRNet.MPRNet(in_c=4, out_c=4)
