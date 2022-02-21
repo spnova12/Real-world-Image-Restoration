@@ -95,8 +95,6 @@ This project deals with the following noise images through deep learning.
   cd /works/project/Real_world_Image_Restoration
   ```
 
-  
-## Quick Run
 
 ## Training and Evaluation
 ### 1. sRGB
